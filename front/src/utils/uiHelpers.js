@@ -1,0 +1,515 @@
+import axios from "axios";
+import { Avatar, Tooltip, Image } from "antd";
+import {
+  EyeOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  TagOutlined,
+  PlayCircleFilled,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+
+export const cloudinaryUpload = axios.create({
+  withCredentials: false,
+});
+
+export const cloudName = process.env.REACT_APP_CLOUD_NAME;
+export const presetKey = process.env.REACT_APP_PRESET_KEY;
+
+export const ACCEPTED_IMAGE = ".jpg,.jpeg,.png,.webp,.gif";
+export const ACCEPTED_VIDEO = ".mp4,.mov,.avi,.webm,.mkv";
+
+// ── Tokens ──────────────────────────────────────────────────────
+export const sidebarBg = "rgb(7, 20, 60)";
+export const primary = "#854a9a";
+export const primaryGlow = "rgba(133,74,154,0.35)";
+export const primaryDim = "rgba(133,74,154,0.12)";
+export const primaryMid = "rgba(133,74,154,0.25)";
+export const accent = "#fea549";
+export const accentDim = "rgba(254,165,73,0.12)";
+export const accentMid = "rgba(254,165,73,0.25)";
+
+// ── Masonry grid ─────────────────────────────────────────────────
+export const Masonry = ({ items, columns = 4, gap = 14, renderItem }) => {
+  const cols = Array.from({ length: columns }, () => []);
+  items.forEach((item, i) => cols[i % columns].push(item));
+  return (
+    <div style={{ display: "flex", gap, alignItems: "flex-start" }}>
+      {cols.map((col, ci) => (
+        <div
+          key={ci}
+          style={{ flex: 1, display: "flex", flexDirection: "column", gap }}
+        >
+          {col.map((item) => renderItem(item))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ── Media card ───────────────────────────────────────────────────
+export const MediaCard = ({ item, onDelete }) => {
+  const navigate = useNavigate();
+  const isVideo = item.type === "video";
+  const date = new Date(item.createdAt).toLocaleDateString("en-KE", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
+  return (
+    <Image.PreviewGroup>
+      <div className="media-card-wrap">
+        {isVideo ? (
+          <>
+            <video
+              src={item.url}
+              style={{
+                width: "100%",
+                height: 200,
+                objectFit: "cover",
+                borderRadius: 10,
+              }}
+              muted
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%,-50%)",
+                color: "rgba(255,255,255,0.85)",
+                fontSize: 40,
+                pointerEvents: "none",
+                filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.6))",
+              }}
+            >
+              <PlayCircleFilled />
+            </div>
+          </>
+        ) : (
+          <Image
+            src={item.url}
+            alt={item.title}
+            style={{
+              width: "100%",
+              objectFit: "cover",
+              borderRadius: 10,
+              display: "block",
+            }}
+            preview={{
+              cover: <EyeOutlined style={{ fontSize: 20 }} />,
+            }}
+          />
+        )}
+
+        {/* Hover overlay */}
+        <div className="media-overlay">
+          {/* Banner tag */}
+          {item.banner && (
+            <div style={{ marginBottom: 8 }}>
+              <span
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontSize: 10,
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: accent,
+                  background: accentDim,
+                  border: `1px solid rgba(254,165,73,0.3)`,
+                  borderRadius: 20,
+                  padding: "2px 10px",
+                }}
+              >
+                <TagOutlined style={{ marginRight: 4 }} />
+                {item.banner}
+              </span>
+            </div>
+          )}
+
+          {/* Title */}
+          <p
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#fff",
+              margin: "0 0 4px",
+              lineHeight: 1.3,
+            }}
+          >
+            {item.title}
+          </p>
+
+          {/* Description */}
+          {item.description && (
+            <p
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: 11,
+                color: "rgba(255,255,255,0.55)",
+                margin: "0 0 10px",
+                lineHeight: 1.5,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {item.description}
+            </p>
+          )}
+
+          {/* Author row */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Avatar
+                src={item.createdBy?.avatar}
+                size={24}
+                style={{ border: `1px solid ${primaryMid}`, flexShrink: 0 }}
+              >
+                {item.createdBy?.username?.[0]?.toUpperCase()}
+              </Avatar>
+              <div>
+                <p
+                  style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: "rgba(255,255,255,0.85)",
+                    margin: 0,
+                  }}
+                >
+                  {item.createdBy?.username}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "'Outfit', sans-serif",
+                    fontSize: 10,
+                    color: "rgba(255,255,255,0.4)",
+                    margin: 0,
+                  }}
+                >
+                  {date}
+                </p>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div style={{ display: "flex", gap: 6 }}>
+              <Tooltip title="Edit">
+                <button
+                  className="media-action-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/media/edit/${item._id}`);
+                  }}
+                >
+                  <EditOutlined />
+                </button>
+              </Tooltip>
+              <Tooltip title="Delete">
+                <button
+                  className="media-action-btn delete-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete?.(item);
+                  }}
+                >
+                  <DeleteOutlined />
+                </button>
+              </Tooltip>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Image.PreviewGroup>
+  );
+};
+
+// ── Stat card ────────────────────────────────────────────────────
+export const MediaStatCard = ({ icon, value, label, color }) => {
+  return (
+    <div
+      className="stat-card"
+      style={{
+        background: "#fff",
+        borderRadius: 12,
+        border: "1px solid rgba(133,74,154,0.08)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+        padding: "18px 20px",
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        transition: "all 0.25s ease",
+        cursor: "default",
+        flex: 1,
+      }}
+    >
+      <div
+        style={{
+          width: 42,
+          height: 42,
+          borderRadius: 10,
+          flexShrink: 0,
+          background: `${color}18`,
+          border: `1px solid ${color}33`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color,
+          fontSize: 18,
+        }}
+      >
+        {icon}
+      </div>
+      <div>
+        <p
+          style={{
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: "1.4rem",
+            fontWeight: 700,
+            color: "#1a1a1a",
+            margin: 0,
+            lineHeight: 1,
+          }}
+        >
+          {value}
+        </p>
+        <p
+          style={{
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: 11,
+            fontWeight: 500,
+            color: "#999",
+            margin: "4px 0 0",
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+          }}
+        >
+          {label}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export const globalStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+  .media-card-wrap { position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; break-inside: avoid; margin-bottom: 14px; }
+  .media-card-wrap img,
+  .media-card-wrap video { display: block; width: 100%; transition: transform 0.4s ease; border-radius: 10px; }
+  .media-card-wrap:hover img,
+  .media-card-wrap:hover video { transform: scale(1.04); }
+
+  .media-overlay {
+    position: absolute; inset: 0; border-radius: 10px;
+    background: linear-gradient(to top, rgba(5,3,15,0.92) 0%, rgba(5,3,15,0.4) 50%, transparent 100%);
+    opacity: 0; transition: opacity 0.3s ease;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 16px;
+  }
+  .media-card-wrap:hover .media-overlay { opacity: 1; }
+
+  .media-action-btn {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  .media-action-btn:hover { background: ${primary}; border-color: ${primary}; color: #fff; }
+  .delete-btn:hover { background: #e74c3c !important; border-color: #e74c3c !important; }
+
+  .upload-btn:hover { background: #6a3a7e !important; transform: translateY(-1px) !important; box-shadow: 0 6px 18px rgba(133,74,154,0.4) !important; }
+
+  .stat-card:hover { border-color: ${primaryMid} !important; transform: translateY(-2px) !important; box-shadow: 0 8px 24px rgba(133,74,154,0.2) !important; }
+
+  .media-tabs .ant-tabs-tab { font-family: 'Outfit', sans-serif !important; font-weight: 500 !important; font-size: 13px !important; }
+  .media-tabs .ant-tabs-tab-active .ant-tabs-tab-btn { color: ${primary} !important; }
+  .media-tabs .ant-tabs-ink-bar { background: ${primary} !important; }
+  .media-tabs .ant-tabs-nav::before { border-color: rgba(133,74,154,0.12) !important; }
+
+  .filter-select .ant-select-selector { border-color: rgba(133,74,154,0.2) !important; border-radius: 8px !important; font-family: 'Outfit', sans-serif !important; }
+  .filter-select .ant-select-selector:hover { border-color: ${primary} !important; }
+
+  .search-input .ant-input { font-family: 'Outfit', sans-serif !important; font-size: 13px !important; }
+  .search-input .ant-input-prefix { color: rgba(133,74,154,0.5) !important; }
+  .search-input .ant-input-affix-wrapper { border-radius: 8px !important; border-color: rgba(133,74,154,0.2) !important; }
+  .search-input .ant-input-affix-wrapper:focus-within { border-color: ${primary} !important; box-shadow: 0 0 0 2px ${primaryDim} !important; }
+
+  .cm-form .ant-form-item-label > label {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      color: #555 !important;
+    }
+    .cm-form .ant-input,
+    .cm-form .ant-input-affix-wrapper,
+    .cm-form textarea.ant-input,
+    .cm-form .ant-select-selector {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: 14px !important;
+      border-color: rgba(133,74,154,0.2) !important;
+      border-radius: 8px !important;
+      transition: all 0.25s ease !important;
+    }
+    .cm-form .ant-input:focus,
+    .cm-form .ant-input-affix-wrapper-focused,
+    .cm-form .ant-select-focused .ant-select-selector {
+      border-color: ${primary} !important;
+      box-shadow: 0 0 0 3px ${primaryDim} !important;
+    }
+    .cm-form .ant-input-prefix { color: rgba(133,74,154,0.5) !important; }
+    .cm-form .ant-form-item-explain-error {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: 12px !important;
+    }
+    .cm-form .ant-select-selector {
+      border-radius: 8px !important;
+    }
+    .cm-form .ant-select:hover .ant-select-selector {
+      border-color: ${primary} !important;
+    }
+  
+    /* Dragger */
+    .cm-dragger .ant-upload-drag {
+      border: 2px dashed rgba(133,74,154,0.28) !important;
+      border-radius: 12px !important;
+      background: ${primaryDim} !important;
+      transition: all 0.25s ease !important;
+    }
+    .cm-dragger .ant-upload-drag:hover,
+    .cm-dragger .ant-upload-drag-hover {
+      border-color: ${primary} !important;
+      background: rgba(133,74,154,0.15) !important;
+    }
+    .cm-dragger .ant-upload-drag-icon { margin-bottom: 8px !important; }
+  
+    .submit-btn:hover {
+      background: #6a3a7e !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 24px ${primaryGlow} !important;
+    }
+    .reset-btn:hover {
+      border-color: ${primary} !important;
+      color: ${primary} !important;
+    }
+    .preview-remove:hover {
+      background: rgba(231,76,60,0.12) !important;
+      border-color: #e74c3c !important;
+      color: #e74c3c !important;
+    }
+
+      /* Sidebar menu item hover & selected */
+  .admin-menu .ant-menu-item:hover,
+  .admin-menu .ant-menu-submenu-title:hover {
+    background: ${accentDim} !important;
+    border-radius: 8px !important;
+  }
+  .admin-menu .ant-menu-item-selected {
+    background: ${accentDim} !important;
+    border-radius: 8px !important;
+    border-left: 3px solid ${accent} !important;
+  }
+  .admin-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+    color: ${accent} !important;
+  }
+  .admin-menu .ant-menu-sub {
+    background: rgba(0,0,0,0.2) !important;
+    border-radius: 8px !important;
+    margin: 2px 4px !important;
+  }
+  .admin-menu .ant-menu-item,
+  .admin-menu .ant-menu-submenu-title {
+    border-radius: 8px !important;
+    margin: 3px 4px !important;
+    height: auto !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  .admin-menu .ant-menu-item .ant-menu-item-icon,
+  .admin-menu .ant-menu-submenu-title .ant-menu-item-icon {
+    min-width: 22px !important;
+    font-size: 18px !important;
+    color: rgba(255,255,255,0.7) !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+  }
+  .admin-menu .ant-menu-item-selected .ant-menu-item-icon,
+  .admin-menu .ant-menu-item:hover .ant-menu-item-icon {
+    color: ${accent} !important;
+  }
+  .admin-menu .ant-menu-submenu-arrow {
+    color: rgba(255,255,255,0.4) !important;
+  }
+  .admin-menu .ant-menu-inline.ant-menu-sub .ant-menu-item {
+    padding-left: 44px !important;
+  }
+
+  .plus-btn:hover {
+    background: ${accentMid} !important;
+    border-color: ${accent} !important;
+    color: ${accent} !important;
+    transform: scale(1.1) !important;
+  }
+
+  .header-icon-btn:hover {
+    background: rgba(255,255,255,0.1) !important;
+    color: #fff !important;
+  }
+
+  .logout-btn:hover {
+    transform: scale(1.05) !important;
+  }
+
+  .collapse-toggle:hover {
+    background: ${accentDim} !important;
+    border-color: ${accentMid} !important;
+    color: ${accent} !important;
+  }
+
+   .mp-copy-btn:hover { background: ${primaryDim} !important; border-color: ${primaryMid} !important; color: ${primary} !important; }
+  .mp-edit-btn:hover { background: ${primaryDim} !important; border-color: ${primaryMid} !important; color: ${primary} !important; transform: translateY(-1px) !important; }
+  .mp-delete-btn:hover { background: rgba(231,76,60,0.1) !important; border-color: #e74c3c !important; color: #e74c3c !important; transform: translateY(-1px) !important; }
+  .mp-open-btn:hover { background: #6a3a7e !important; transform: translateY(-1px) !important; box-shadow: 0 6px 18px rgba(133,74,154,0.4) !important; }
+  .mp-meta-row:hover { background: ${primaryDim} !important; border-radius: 8px !important; }
+
+  /* Make scrollbar paper-thin and minimal */
+::-webkit-scrollbar {    
+  height: 2px; /* Use height for horizontal scrolling */
+  width: 2px;  /* Keep this too, for vertical scroll areas */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(144, 137, 137);
+  border-radius: 1px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+  `;

@@ -1,0 +1,34 @@
+/* Removes the default purple/gray background of submenu container */
+.ant-menu-sub {
+  background: transparent !important;
+}
+
+/* If you also have horizontal mode (popup style) */
+.ant-menu-submenu-popup > .ant-menu {
+  background: linear-gradient(to right, #000000d6 0%, #232527ff 100%) !important;
+  margin-left:6px !important;
+}
+
+/* Make scrollbar paper-thin and minimal */
+::-webkit-scrollbar {    
+  height: 2px; /* Use height for horizontal scrolling */
+  width: 2px;  /* Keep this too, for vertical scroll areas */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(144, 137, 137);
+  border-radius: 1px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+

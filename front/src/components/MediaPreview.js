@@ -1,4 +1,3 @@
-import React from "react";
 import { Avatar, Divider, Tooltip, Button, Row, Col, Image } from "antd";
 import {
   CalendarOutlined,
@@ -144,10 +143,15 @@ function MediaPreview({ content }) {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const updatedDate = new Date(content.updatedAt).toLocaleDateString("en-KE", {
+  const updateDate = new Date(content.updatedAt).toLocaleDateString("en-KE", {
+    weekday: "short",
     day: "numeric",
     month: "short",
     year: "numeric",
+  });
+  const updateTime = new Date(content.updatedAt).toLocaleTimeString("en-KE", {
+    hour: "2-digit",
+    minute: "2-digit",
   });
 
   const handleCopy = () => {
@@ -339,7 +343,7 @@ function MediaPreview({ content }) {
               <MetaRow
                 icon={<ClockCircleOutlined />}
                 label="Last updated"
-                value={updatedDate}
+                value={`${updateDate} at ${updateTime}`}
               />
             </Col>
             <Col>

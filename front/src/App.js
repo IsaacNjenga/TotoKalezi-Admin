@@ -20,7 +20,8 @@ function App() {
   const location = useLocation();
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) return <Spin fullscreen tip="Authenticating..." size="small" />;
+  if (loading)
+    return <Spin fullscreen description="Authenticating..." size="large" />;
 
   return (
     <>

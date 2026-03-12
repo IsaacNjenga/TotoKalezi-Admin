@@ -301,6 +301,85 @@ export const MediaStatCard = ({ icon, value, label, color }) => {
   );
 };
 
+export const VolunteerStatCard = ({ icon, value, label, color, sub }) => {
+  return (
+    <div
+      className="stat-card"
+      style={{
+        background: "#fff",
+        borderRadius: 12,
+        border: "1px solid rgba(133,74,154,0.08)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
+        padding: "18px 20px",
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        transition: "all 0.25s ease",
+        flex: 1,
+        cursor: "default",
+      }}
+    >
+      <div
+        style={{
+          width: 44,
+          height: 44,
+          borderRadius: 10,
+          flexShrink: 0,
+          background: `${color}18`,
+          border: `1px solid ${color}33`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color,
+          fontSize: 20,
+        }}
+      >
+        {icon}
+      </div>
+      <div>
+        <p
+          style={{
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: "1.5rem",
+            fontWeight: 700,
+            color: "#1a1a1a",
+            margin: 0,
+            lineHeight: 1,
+          }}
+        >
+          {value}
+        </p>
+        <p
+          style={{
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: 11,
+            fontWeight: 600,
+            color: "#aaa",
+            margin: "4px 0 0",
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+          }}
+        >
+          {label}
+        </p>
+        {sub && (
+          <p
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 11,
+              color: color,
+              margin: "2px 0 0",
+              fontWeight: 500,
+            }}
+          >
+            {sub}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const globalStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
@@ -511,5 +590,43 @@ export const globalStyles = `
 ::-webkit-scrollbar-button {
   display: none;
 }
+
+ .vol-table .ant-table { font-family: 'Outfit', sans-serif !important; overflow: hidden !important; }
+  .vol-table .ant-table-thead > tr > th {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 11px !important; font-weight: 700 !important;
+    letter-spacing: 0.1em !important; text-transform: uppercase !important;
+    color: #888 !important;
+    background: #faf8fc !important;
+    border-bottom: 1px solid rgba(133,74,154,0.1) !important;
+    padding: 14px 16px !important;
+  }
+  .vol-table .ant-table-tbody > tr > td {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 13px !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid rgba(133,74,154,0.06) !important;
+    transition: background 0.2s ease !important;
+  }
+  .vol-table .ant-table-tbody > tr:hover > td { background: ${primaryDim} !important; }
+  .vol-table .ant-table-tbody > tr.unread-row > td { background: rgba(133,74,154,0.04) !important; }
+  .vol-table .ant-table-tbody > tr.unread-row:hover > td { background: ${primaryDim} !important; }
+  .vol-table .ant-pagination { font-family: 'Outfit', sans-serif !important; padding: 16px !important; }
+  .vol-table .ant-pagination-item-active { border-color: ${primary} !important; }
+  .vol-table .ant-pagination-item-active a { color: ${primary} !important; }
+
+  .action-btn:hover { background: ${primaryDim} !important; border-color: ${primaryMid} !important; color: ${primary} !important; transform: scale(1.05) !important; }
+  .delete-btn:hover { background: rgba(231,76,60,0.1) !important; border-color: #e74c3c !important; color: #e74c3c !important; transform: scale(1.05) !important; }
+  .mark-read-btn:hover { background: rgba(39,174,96,0.1) !important; border-color: #27ae60 !important; color: #27ae60 !important; }
+
+  .stat-card:hover { border-color: ${primaryMid} !important; transform: translateY(-2px) !important; box-shadow: 0 8px 24px rgba(133,74,154,0.15) !important; }
+
+  .filter-select .ant-select-selector { border-color: rgba(133,74,154,0.2) !important; border-radius: 8px !important; font-family: 'Outfit', sans-serif !important; }
+  .filter-select .ant-select-selector:hover,
+  .filter-select.ant-select-focused .ant-select-selector { border-color: ${primary} !important; }
+
+  .search-wrap .ant-input-affix-wrapper { border-radius: 8px !important; border-color: rgba(133,74,154,0.2) !important; font-family: 'Outfit', sans-serif !important; }
+  .search-wrap .ant-input-affix-wrapper:focus-within { border-color: ${primary} !important; box-shadow: 0 0 0 3px ${primaryDim} !important; }
+  .search-wrap .ant-input-prefix { color: rgba(133,74,154,0.45) !important; }
 
   `;

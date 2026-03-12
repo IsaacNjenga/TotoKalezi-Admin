@@ -16,7 +16,7 @@ const createVolunteer = async (req, res) => {
 const fetchVolunteers = async (req, res) => {
   try {
     const volunteers = await VolunteerModel.find().sort({ createdAt: -1 });
-    return res.status(200).json({ volunteers });
+    return res.status(200).json({ success: true, volunteers: volunteers });
   } catch (error) {
     console.log("Error in fetching volunteers:", error);
     return res.status(500).json({ message: error.message });

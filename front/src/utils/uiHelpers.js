@@ -380,6 +380,29 @@ export const VolunteerStatCard = ({ icon, value, label, color, sub }) => {
   );
 };
 
+export const volunteerTableCollapseStyles = `
+  .vol-collapse .ant-collapse-item {
+    border-bottom: 1px solid rgba(133,74,154,0.08) !important;
+  }
+  .vol-collapse .ant-collapse-item:last-child {
+    border-bottom: none !important;
+  }
+  .vol-collapse .ant-collapse-header {
+    background: #faf8fc !important;
+    transition: background 0.2s ease !important;
+  }
+  .vol-collapse .ant-collapse-header:hover {
+    background: ${primaryDim} !important;
+  }
+  .vol-collapse .ant-collapse-item-active .ant-collapse-header {
+    background: ${primaryDim} !important;
+    border-bottom: 1px solid ${primaryMid} !important;
+  }
+  .vol-collapse .ant-collapse-arrow {
+    color: ${primary} !important;
+  }
+`;
+
 export const globalStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
@@ -611,7 +634,7 @@ export const globalStyles = `
   .vol-table .ant-table-tbody > tr:hover > td { background: ${primaryDim} !important; }
   .vol-table .ant-table-tbody > tr.unread-row > td { background: rgba(118, 73, 134, 0.04) !important; }
   .vol-table .ant-table-tbody > tr.unread-row:hover > td { background: ${primaryDim} !important; }
-  .vol-table .ant-pagination { font-family: 'Outfit', sans-serif !important; padding: 16px !important; }
+  .vol-table .ant-pagination { font-family: 'Outfit', sans-serif !important;  }
   .vol-table .ant-pagination-item-active { border-color: ${primary} !important; }
   .vol-table .ant-pagination-item-active a { color: ${primary} !important; }
 
@@ -627,4 +650,51 @@ export const globalStyles = `
   .search-wrap .ant-input-affix-wrapper:focus-within { border-color: ${primary} !important; box-shadow: 0 0 0 3px ${primaryDim} !important; }
   .search-wrap .ant-input-prefix { color: rgba(133,74,154,0.45) !important; }
 
+
+   .vol-collapse .ant-collapse-item {
+    border-bottom: 1px solid rgba(133,74,154,0.08) !important;
+  }
+  .vol-collapse .ant-collapse-item:last-child {
+    border-bottom: none !important;
+  }
+  .vol-collapse .ant-collapse-header {
+    background: #faf8fc !important;
+    transition: background 0.2s ease !important;
+  }
+  .vol-collapse .ant-collapse-header:hover {
+    background: ${primaryDim} !important;
+  }
+  .vol-collapse .ant-collapse-item-active .ant-collapse-header {
+    background: ${primaryDim} !important;
+    border-bottom: 1px solid ${primaryMid} !important;
+  }
+  .vol-collapse .ant-collapse-arrow {
+    color: ${primary} !important;
+  }
+
+  .vol-table .ant-pagination {
+  font-size: 12px;
+}
+
+.vol-table .ant-pagination-item {
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  font-size: 10px;
+}
+
+.vol-table .ant-pagination-prev,
+.vol-table .ant-pagination-next {
+  min-width: 26px;
+  height: 26px;
+  line-height: 24px;
+}
+
+.vol-table .ant-pagination-options {
+  font-size: 12px;
+}
+
+.vol-table .ant-select-selector {
+  height: 12px !important;
+}
   `;

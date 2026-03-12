@@ -1,20 +1,10 @@
 import { useState, useMemo } from "react";
-import {
-  Table,
-  Avatar,
-  Button,
-  Input,
-  Select,
-  Tooltip,
-  Badge,
-  Empty,
-} from "antd";
+import { Table, Avatar, Button, Input, Tooltip, Empty, Collapse } from "antd";
 import {
   SearchOutlined,
   ReloadOutlined,
   ClockCircleOutlined,
   TeamOutlined,
-  FilterOutlined,
   StarOutlined,
   MailOutlined,
   StarFilled,
@@ -26,7 +16,6 @@ import {
   globalStyles,
   primary,
   accent,
-  accentDim,
   VolunteerStatCard,
 } from "../utils/uiHelpers";
 import VolunteerDetail from "../components/VolunteerPreview";
@@ -50,6 +39,58 @@ const btnStyle = {
   padding: 0,
 };
 
+const RenderTable = ({
+  openModal,
+  loading,
+  emptyMessage,
+  columns,
+  filtered,
+}) => {
+  return (
+    <Table
+      className="vol-table"
+      loading={loading}
+      dataSource={filtered}
+      columns={columns}
+      showHeader={false}
+      size="small"
+      rowKey="_id"
+      pagination={{
+        pageSize: 10,
+        size: "small",
+        showSizeChanger: false,
+      }}
+      rowClassName={(r) => (r.isRead ? "" : "unread-row")}
+      onRow={(record) => ({
+        onClick: () => openModal(record),
+        style: { cursor: "pointer" },
+      })}
+      locale={{
+        emptyText: (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={
+              <span
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  color: "#bbb",
+                }}
+              >
+                {emptyMessage || "No submissions found"}
+              </span>
+            }
+          />
+        ),
+      }}
+    />
+  );
+};
+
+const panelStyles = {
+  header: { padding: "10px 16px", margin: 0 },
+  body: { padding: 0, margin: 0 },
+};
+
 function Volunteers() {
   const { token } = useAuth();
   const { volunteers, loading, refresh } = useFetchAllVolunteers();
@@ -58,6 +99,7 @@ function Volunteers() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
+  const [activePanel, setActivePanel] = useState("unread");
 
   const updateMsg = async (id, updateData) => {
     if (!id || !token) return;
@@ -75,12 +117,16 @@ function Volunteers() {
 
   const handleMenuClick = async (key, record) => {
     if (!key || !record) return;
+
     if (key === "toggle-read") {
-      await updateMsg(record._id, { read: !record.isRead });
-    } else if (key === "toggle-star") {
-      await updateMsg(record._id, { starred: !record.isStarred });
+      await updateMsg(record._id, { isRead: !record.isRead });
     }
-    // refresh(); // refresh the list
+
+    if (key === "toggle-star") {
+      await updateMsg(record._id, { isStarred: !record.isStarred });
+    }
+
+    refresh(); // ensure table updates
   };
 
   const unread = useMemo(
@@ -91,22 +137,10 @@ function Volunteers() {
     () => volunteers?.filter((v) => v.isRead).length ?? 0,
     [volunteers],
   );
-
-  const filtered = useMemo(() => {
-    let base = volunteers ?? [];
-    if (statusFilter === "unread") base = base.filter((v) => !v.isRead);
-    if (statusFilter === "read") base = base.filter((v) => v.isRead);
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      base = base.filter(
-        (v) =>
-          v.fullName?.toLowerCase().includes(q) ||
-          v.email?.toLowerCase().includes(q) ||
-          v.message?.toLowerCase().includes(q),
-      );
-    }
-    return base;
-  }, [volunteers, search, statusFilter]);
+  const starred = useMemo(
+    () => volunteers?.filter((v) => v.isStarred).length ?? 0,
+    [volunteers],
+  );
 
   const openModal = async (record) => {
     setSelected(record);
@@ -114,21 +148,57 @@ function Volunteers() {
     await updateMsg(record._id, { isRead: true });
   };
 
+  // search helper
+  const applySearch = (data) => {
+    if (!search.trim()) return data;
+
+    const q = search.toLowerCase();
+
+    return data.filter(
+      (v) =>
+        v.fullName?.toLowerCase().includes(q) ||
+        v.email?.toLowerCase().includes(q) ||
+        v.message?.toLowerCase().includes(q),
+    );
+  };
+
+  const unreadFiltered = useMemo(() => {
+    let base = volunteers?.filter((v) => !v.isRead) ?? [];
+
+    if (statusFilter === "read") return []; // user forced opposite filter
+
+    return applySearch(base);
+    // eslint-disable-next-line
+  }, [volunteers, search, statusFilter]);
+
+  const readFiltered = useMemo(() => {
+    let base = volunteers?.filter((v) => v.isRead) ?? [];
+
+    if (statusFilter === "unread") return [];
+
+    return applySearch(base);
+    // eslint-disable-next-line
+  }, [volunteers, search, statusFilter]);
+
   const columns = [
     {
       title: "",
       key: "actions",
       width: 50,
       render: (_, record) => (
-        <div style={{ display: "flex", gap: 6 }}>
+        <div
+          style={{ display: "flex", gap: 6, cursor: "default" }}
+          onClick={(e) => e.stopPropagation()} // prevents row click
+        >
           <Tooltip title={record.isStarred ? "Unstar" : "Star"}>
             <Button
               type="text"
               className="star-btn"
-              style={{
-                ...btnStyle,
+              style={btnStyle}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuClick("toggle-star", record);
               }}
-              onClick={() => handleMenuClick("toggle-star", record)}
             >
               {record.isStarred ? (
                 <StarFilled style={{ color: "#f39c12" }} />
@@ -137,12 +207,16 @@ function Volunteers() {
               )}
             </Button>
           </Tooltip>
+
           <Tooltip title={record.isRead ? "Mark as Unread" : "Mark as Read"}>
             <Button
               type="text"
               className="read-btn"
               style={btnStyle}
-              onClick={() => handleMenuClick("toggle-read", record)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuClick("toggle-read", record);
+              }}
             >
               {!record.isRead ? (
                 <CarryOutOutlined style={{ color: "#27ae60" }} />
@@ -244,6 +318,76 @@ function Volunteers() {
     },
   ];
 
+  const items = [
+    {
+      key: "unread",
+      styles: panelStyles,
+      label: (
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#555",
+            }}
+          >
+            Unread
+          </span>
+        </div>
+      ),
+      children: (
+        <RenderTable
+          openModal={openModal}
+          loading={loading}
+          columns={columns}
+          filtered={unreadFiltered}
+          emptyMessage={
+            search
+              ? "No unread submissions match your search"
+              : "No unread submissions"
+          }
+        />
+      ),
+    },
+    {
+      key: "read",
+      styles: panelStyles,
+      label: (
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#555",
+            }}
+          >
+            Read
+          </span>
+        </div>
+      ),
+      children: (
+        <RenderTable
+          openModal={openModal}
+          loading={loading}
+          columns={columns}
+          filtered={readFiltered}
+          emptyMessage={
+            search
+              ? "No read submissions match your search"
+              : "No read submissions"
+          }
+        />
+      ),
+    },
+  ];
+
+  const totalFiltered = unreadFiltered.length + readFiltered.length;
   return (
     <>
       <style>{globalStyles}</style>
@@ -314,6 +458,12 @@ function Volunteers() {
             value={read}
             label="Read"
             color="#27ae60"
+          />{" "}
+          <VolunteerStatCard
+            icon={<StarFilled />}
+            value={starred}
+            label="Starred"
+            color="#f39c12"
           />
         </div>
 
@@ -328,49 +478,17 @@ function Volunteers() {
             marginBottom: 16,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            gap: 12,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <FilterOutlined style={{ color: primary, fontSize: 14 }} />
-            <p
-              style={{
-                fontFamily: "'Outfit', sans-serif",
-                fontSize: 12,
-                fontWeight: 600,
-                color: "#888",
-                margin: 0,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-              }}
-            >
-              Filters
-            </p>
-          </div>
-          <div style={{ display: "flex", gap: 10 }}>
-            <div className="search-wrap">
-              <Input
-                prefix={<SearchOutlined />}
-                placeholder="Search by name, email, message…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                allowClear
-                style={{ width: 260 }}
-              />
-            </div>
-            <Select
-              className="filter-select"
-              value={statusFilter}
-              onChange={setStatusFilter}
-              style={{ width: 140 }}
-              options={[
-                { label: "All submissions", value: "all" },
-                { label: "Unread only", value: "unread" },
-                { label: "Read only", value: "read" },
-              ]}
-            />
-          </div>
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder="Search by name, email, message…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            allowClear
+            size="large"
+            style={{ width: "100%", maxWidth: 1200 }}
+          />
         </div>
 
         {/* ── Table ── */}
@@ -401,75 +519,29 @@ function Volunteers() {
                 margin: 0,
               }}
             >
-              Showing{" "}
-              <strong style={{ color: "#666" }}>{filtered.length}</strong> of{" "}
-              <strong style={{ color: "#666" }}>
-                {volunteers?.length ?? 0}
-              </strong>{" "}
+              Showing <strong style={{ color: "#666" }}>{totalFiltered}</strong>{" "}
               submissions
             </p>
-            {unread > 0 && (
-              <Badge
-                count={`${unread} unread`}
-                style={{
-                  background: accentDim,
-                  color: accent,
-                  border: `1px solid rgba(254,165,73,0.3)`,
-                  fontFamily: "'Outfit', sans-serif",
-                  fontWeight: 600,
-                  fontSize: 10,
-                  boxShadow: "none",
-                }}
-              />
-            )}
           </div>
 
-          <Table
-            className="vol-table"
-            loading={loading}
-            dataSource={filtered}
-            columns={columns}
-            showHeader={false}
-            size="small"
-            rowKey="_id"
-            pagination={{
-              pageSize: 10,
-              showSizeChanger: true,
-              showTotal: (total) => (
-                <span
-                  style={{
-                    fontFamily: "'Outfit', sans-serif",
-                    fontSize: 12,
-                    color: "#656464",
-                  }}
-                >
-                  {total} total
-                </span>
-              ),
-            }}
-            rowClassName={(r) => (r.isRead ? "" : "unread-row")}
-            onRow={(record) => ({
-              onClick: () => openModal(record),
-              style: { cursor: "pointer" },
-            })}
-            locale={{
-              emptyText: (
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description={
-                    <span
-                      style={{
-                        fontFamily: "'Outfit', sans-serif",
-                        color: "#bbb",
-                      }}
-                    >
-                      No volunteers found
-                    </span>
-                  }
-                />
-              ),
-            }}
-          />
+          {search ? (
+            <RenderTable
+              openModal={openModal}
+              loading={loading}
+              columns={columns}
+              filtered={readFiltered}
+              emptyMessage={"No  submissions match your search"}
+            />
+          ) : (
+            <Collapse
+              accordion
+              items={items}
+              activeKey={activePanel}
+              onChange={(key) => setActivePanel(key)}
+              className="vol-collapse"
+              style={{ padding: 0, border: "none" }}
+            />
+          )}
         </div>
       </div>
 

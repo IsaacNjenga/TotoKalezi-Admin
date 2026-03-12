@@ -23,4 +23,16 @@ const fetchVolunteers = async (req, res) => {
   }
 };
 
-export { createVolunteer, fetchVolunteers };
+const updateVolunteer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    await VolunteerModel.findByIdAndUpdate(id, updateData, { new: true });
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.log("Error in updating volunteer:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export { createVolunteer, fetchVolunteers, updateVolunteer };

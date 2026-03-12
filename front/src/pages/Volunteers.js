@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import {
   Table,
-  Tag,
   Avatar,
   Button,
   Input,
@@ -13,14 +12,16 @@ import {
 import {
   SearchOutlined,
   ReloadOutlined,
-  DeleteOutlined,
   ClockCircleOutlined,
   TeamOutlined,
-  ReadOutlined,
   FilterOutlined,
+  StarOutlined,
+  MailOutlined,
+  StarFilled,
+  CarryOutOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import useFetchAllVolunteers from "../hooks/fetchVolunteers";
-import LoadingComponent from "../components/LoadingComponent";
 import {
   globalStyles,
   primary,
@@ -30,13 +31,57 @@ import {
 } from "../utils/uiHelpers";
 import VolunteerDetail from "../components/VolunteerPreview";
 import DetailsModal from "../components/DetailsModal";
+import { useNotification } from "../contexts/NotificationContext";
+import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
+
+const btnStyle = {
+  width: 22,
+  height: 22,
+  border: "0px solid rgba(231,76,60,0.18)",
+  background: 0,
+  color: "#9d9d9d",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  fontSize: 12,
+  transition: "all 0.2s ease",
+  padding: 0,
+};
 
 function Volunteers() {
+  const { token } = useAuth();
   const { volunteers, loading, refresh } = useFetchAllVolunteers();
+  const openNotification = useNotification();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const updateMsg = async (id, updateData) => {
+    if (!id || !token) return;
+    try {
+      await axios.post(
+        `/volunteers/mark-record/${id}`,
+        { ...updateData },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+    } catch (error) {
+      console.error("Error marking email:", error);
+      openNotification("error", "Error", "Failed to mark email as read");
+    }
+  };
+
+  const handleMenuClick = async (key, record) => {
+    if (!key || !record) return;
+    if (key === "toggle-read") {
+      await updateMsg(record._id, { read: !record.isRead });
+    } else if (key === "toggle-star") {
+      await updateMsg(record._id, { starred: !record.isStarred });
+    }
+    // refresh(); // refresh the list
+  };
 
   const unread = useMemo(
     () => volunteers?.filter((v) => !v.isRead).length ?? 0,
@@ -63,16 +108,56 @@ function Volunteers() {
     return base;
   }, [volunteers, search, statusFilter]);
 
-  const openModal = (record) => {
+  const openModal = async (record) => {
     setSelected(record);
     setOpen(true);
+    await updateMsg(record._id, { isRead: true });
   };
 
   const columns = [
     {
+      title: "",
+      key: "actions",
+      width: 50,
+      render: (_, record) => (
+        <div style={{ display: "flex", gap: 6 }}>
+          <Tooltip title={record.isStarred ? "Unstar" : "Star"}>
+            <Button
+              type="text"
+              className="star-btn"
+              style={{
+                ...btnStyle,
+              }}
+              onClick={() => handleMenuClick("toggle-star", record)}
+            >
+              {record.isStarred ? (
+                <StarFilled style={{ color: "#f39c12" }} />
+              ) : (
+                <StarOutlined />
+              )}
+            </Button>
+          </Tooltip>
+          <Tooltip title={record.isRead ? "Mark as Unread" : "Mark as Read"}>
+            <Button
+              type="text"
+              className="read-btn"
+              style={btnStyle}
+              onClick={() => handleMenuClick("toggle-read", record)}
+            >
+              {!record.isRead ? (
+                <CarryOutOutlined style={{ color: "#27ae60" }} />
+              ) : (
+                <MailOutlined />
+              )}
+            </Button>
+          </Tooltip>
+        </div>
+      ),
+    },
+    {
       title: "Full Name",
       key: "volunteer",
-      width: 260,
+      width: 170,
       ellipsis: true,
       render: (_, record) => {
         const initials = record.fullName
@@ -84,7 +169,7 @@ function Volunteers() {
         return (
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <Avatar
-              size={36}
+              size={28}
               style={{
                 background: `linear-gradient(135deg, ${primary} 0%, #a066bc 100%)`,
                 fontSize: 13,
@@ -130,7 +215,7 @@ function Volunteers() {
           style={{
             fontFamily: "'Outfit', sans-serif",
             fontSize: 12,
-            color: "#777",
+            color: "#3f3c3c",
             fontStyle: msg ? "normal" : "italic",
           }}
         >
@@ -139,34 +224,9 @@ function Volunteers() {
       ),
     },
     {
-      title: "Status",
-      dataIndex: "isRead",
-      width: 110,
-      render: (isRead) => (
-        <Tag
-          style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontSize: 10,
-            fontWeight: 600,
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            padding: "2px 10px",
-            borderRadius: 20,
-            border: isRead
-              ? "1px solid rgba(39,174,96,0.25)"
-              : `1px solid rgba(254,165,73,0.3)`,
-            background: isRead ? "rgba(39,174,96,0.08)" : accentDim,
-            color: isRead ? "#27ae60" : accent,
-          }}
-        >
-          {isRead ? "Read" : "Unread"}
-        </Tag>
-      ),
-    },
-    {
       title: "Received",
       dataIndex: "createdAt",
-      width: 140,
+      width: 90,
       render: (date) => (
         <span
           style={{
@@ -175,48 +235,14 @@ function Volunteers() {
             color: "#999",
           }}
         >
-          {new Date(date).toLocaleDateString("en-KE", {
+          {new Date(date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
-            year: "numeric",
           })}
         </span>
       ),
     },
-    {
-      title: "Actions",
-      key: "actions",
-      width: 100,
-      render: (_, record) => (
-        <div style={{ display: "flex", gap: 6 }}>
-          <Tooltip title="Delete">
-            <button
-              className="delete-btn"
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 7,
-                border: "1px solid rgba(231,76,60,0.18)",
-                background: "transparent",
-                color: "#e74c3c",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                fontSize: 14,
-                transition: "all 0.2s ease",
-                padding: 0,
-              }}
-            >
-              <DeleteOutlined />
-            </button>
-          </Tooltip>
-        </div>
-      ),
-    },
   ];
-
-  if (loading) return <LoadingComponent />;
 
   return (
     <>
@@ -284,7 +310,7 @@ function Volunteers() {
             sub={unread > 0 ? `${unread} need attention` : "All caught up"}
           />
           <VolunteerStatCard
-            icon={<ReadOutlined />}
+            icon={<CheckCircleOutlined />}
             value={read}
             label="Read"
             color="#27ae60"
@@ -351,16 +377,16 @@ function Volunteers() {
         <div
           style={{
             background: "#fff",
-            borderRadius: 14,
             border: "1px solid rgba(133,74,154,0.08)",
             boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
             overflow: "hidden",
+            borderRadius: 12,
           }}
         >
           {/* Row count */}
           <div
             style={{
-              padding: "12px 20px",
+              padding: "8px 20px",
               borderBottom: "1px solid rgba(133,74,154,0.07)",
               display: "flex",
               alignItems: "center",
@@ -400,18 +426,21 @@ function Volunteers() {
 
           <Table
             className="vol-table"
+            loading={loading}
             dataSource={filtered}
             columns={columns}
+            showHeader={false}
+            size="small"
             rowKey="_id"
             pagination={{
               pageSize: 10,
-              showSizeChanger: false,
+              showSizeChanger: true,
               showTotal: (total) => (
                 <span
                   style={{
                     fontFamily: "'Outfit', sans-serif",
                     fontSize: 12,
-                    color: "#888585",
+                    color: "#656464",
                   }}
                 >
                   {total} total
@@ -448,6 +477,7 @@ function Volunteers() {
         component={<VolunteerDetail volunteer={selected} />}
         open={open}
         setOpen={setOpen}
+        refresh={refresh}
       />
     </>
   );

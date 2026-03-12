@@ -2,11 +2,14 @@ import { Modal } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { primary, primaryDim, primaryMid } from "../utils/uiHelpers";
 
-function DetailsModal({ setOpen, component, open, width = 680 }) {
+function DetailsModal({ setOpen, component, open, width = 680, refresh }) {
   return (
     <Modal
       open={open}
-      onCancel={() => setOpen(false)}
+      onCancel={() => {
+        setOpen(false);
+        refresh();
+      }}
       centered
       footer={null}
       width={width}

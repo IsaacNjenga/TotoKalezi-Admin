@@ -604,19 +604,17 @@ export const globalStyles = `
   .vol-table .ant-table-tbody > tr > td {
     font-family: 'Outfit', sans-serif !important;
     font-size: 13px !important;
-    padding: 14px 16px !important;
+    padding: 6px 16px !important;
     border-bottom: 1px solid rgba(133,74,154,0.06) !important;
     transition: background 0.2s ease !important;
   }
   .vol-table .ant-table-tbody > tr:hover > td { background: ${primaryDim} !important; }
-  .vol-table .ant-table-tbody > tr.unread-row > td { background: rgba(133,74,154,0.04) !important; }
+  .vol-table .ant-table-tbody > tr.unread-row > td { background: rgba(118, 73, 134, 0.04) !important; }
   .vol-table .ant-table-tbody > tr.unread-row:hover > td { background: ${primaryDim} !important; }
   .vol-table .ant-pagination { font-family: 'Outfit', sans-serif !important; padding: 16px !important; }
   .vol-table .ant-pagination-item-active { border-color: ${primary} !important; }
   .vol-table .ant-pagination-item-active a { color: ${primary} !important; }
 
-  .action-btn:hover { background: ${primaryDim} !important; border-color: ${primaryMid} !important; color: ${primary} !important; transform: scale(1.05) !important; }
-  .delete-btn:hover { background: rgba(231,76,60,0.1) !important; border-color: #e74c3c !important; color: #e74c3c !important; transform: scale(1.05) !important; }
   .mark-read-btn:hover { background: rgba(39,174,96,0.1) !important; border-color: #27ae60 !important; color: #27ae60 !important; }
 
   .stat-card:hover { border-color: ${primaryMid} !important; transform: translateY(-2px) !important; box-shadow: 0 8px 24px rgba(133,74,154,0.15) !important; }

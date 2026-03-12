@@ -6,7 +6,7 @@ const volunteerSchema = new mongoose.Schema(
     email: { type: String, required: true },
     message: { type: String, required: true },
     isRead: { type: Boolean, default: false },
-    
+    isStarred: { type: Boolean, default: false },
   },
   { collections: "volunteers", timestamps: true },
 );

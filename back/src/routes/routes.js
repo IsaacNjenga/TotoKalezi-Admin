@@ -18,6 +18,7 @@ import protectRoute from "../middleware/auth.middleware.js";
 import {
   createVolunteer,
   fetchVolunteers,
+  updateVolunteer,
 } from "../controllers/volunteerController.js";
 
 const router = express.Router();
@@ -40,5 +41,6 @@ router.delete("/delete-media/:id", protectRoute, deleteMedia);
 //volunteer routes
 router.post("/create-volunteer", createVolunteer);
 router.get("/fetch-volunteers", protectRoute, fetchVolunteers);
+router.post("/volunteers/mark-record/:id", protectRoute, updateVolunteer);
 
 export { router as Router };

@@ -125,7 +125,7 @@ const VideoSection = ({ selectedVideo, setSelectedVideo }) => {
         )}
         {selectedVideo.length > 0 ? (
           <Row gutter={[24, 24]}>
-            {selectedVideos.map((item, index) => {
+            {selectedVideo.map((item, index) => {
               return (
                 <Col span={12} key={index}>
                   <div

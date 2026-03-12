@@ -15,6 +15,10 @@ import {
   updateMedia,
 } from "../controllers/mediaController.js";
 import protectRoute from "../middleware/auth.middleware.js";
+import {
+  createVolunteer,
+  fetchVolunteers,
+} from "../controllers/volunteerController.js";
 
 const router = express.Router();
 
@@ -32,5 +36,9 @@ router.get("/fetch-all-media", getAllMedia);
 router.get("/fetch-media/:id", getMedia);
 router.put("/update-media/:id", protectRoute, updateMedia);
 router.delete("/delete-media/:id", protectRoute, deleteMedia);
+
+//volunteer routes
+router.post("/create-volunteer", createVolunteer);
+router.get("/fetch-volunteers", protectRoute, fetchVolunteers);
 
 export { router as Router };

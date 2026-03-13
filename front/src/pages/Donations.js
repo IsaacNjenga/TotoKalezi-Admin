@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Table, Avatar, Button, Input, Tooltip, Badge, Empty } from "antd";
+import { Table, Avatar, Button, Input, Tooltip, Empty } from "antd";
 import {
   SearchOutlined,
   ReloadOutlined,
@@ -9,13 +9,7 @@ import {
 } from "@ant-design/icons";
 import useFetchAllDonations from "../hooks/fetchAllDonations";
 import LoadingComponent from "../components/LoadingComponent";
-import {
-  globalStyles,
-  primary,
-  accent,
-  accentDim,
-  green,
-} from "../utils/uiHelpers";
+import { globalStyles, primary, green } from "../utils/uiHelpers";
 import DetailsModal from "../components/DetailsModal";
 import DonationsPreview from "../components/DonationsPreview";
 
@@ -151,11 +145,6 @@ function Donations() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
-
-  const unread = useMemo(
-    () => donations?.filter((d) => !d.isRead).length ?? 0,
-    [donations],
-  );
 
   const totalKES = useMemo(
     () => donations?.reduce((sum, d) => sum + (d.amount || 0), 0) ?? 0,
@@ -459,20 +448,6 @@ function Donations() {
               Showing <strong style={{ color: "#666" }}>{totalFiltered}</strong>{" "}
               donations
             </p>
-            {unread > 0 && (
-              <Badge
-                count={`${unread} unread`}
-                style={{
-                  background: accentDim,
-                  color: accent,
-                  border: "1px solid rgba(254,165,73,0.3)",
-                  fontFamily: "'Outfit', sans-serif",
-                  fontWeight: 600,
-                  fontSize: 10,
-                  boxShadow: "none",
-                }}
-              />
-            )}
           </div>
 
           <RenderTable

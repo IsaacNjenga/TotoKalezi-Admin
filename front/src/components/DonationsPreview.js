@@ -1,19 +1,13 @@
-import { Tag, Avatar, Button, Divider } from "antd";
+import { Avatar, Button, Divider } from "antd";
 import {
-  MailOutlined,
   CalendarOutlined,
   MessageOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
   CreditCardOutlined,
-  DollarOutlined,
 } from "@ant-design/icons";
 import {
   primary,
   primaryDim,
   primaryMid,
-  accent,
-  accentDim,
   green,
   greenDim,
 } from "../utils/uiHelpers";
@@ -35,7 +29,7 @@ export default function DonationsPreview({ donation }) {
     .slice(0, 2);
 
   return (
-    <div style={{ padding: "24px", fontFamily: "'Outfit', sans-serif" }}>
+    <div style={{ padding: "12px", fontFamily: "'Outfit', sans-serif" }}>
       {/* ── Header row ── */}
       <div
         style={{
@@ -84,36 +78,6 @@ export default function DonationsPreview({ donation }) {
             {donation.email}
           </a>
         </div>
-        <Tag
-          style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontSize: 10,
-            fontWeight: 600,
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            padding: "2px 10px",
-            borderRadius: 20,
-            margin: 0,
-            flexShrink: 0,
-            border: donation.isRead
-              ? "1px solid rgba(39,174,96,0.3)"
-              : "1px solid rgba(254,165,73,0.35)",
-            background: donation.isRead ? greenDim : accentDim,
-            color: donation.isRead ? green : accent,
-          }}
-        >
-          {donation.isRead ? (
-            <>
-              <CheckCircleOutlined style={{ marginRight: 4 }} />
-              Read
-            </>
-          ) : (
-            <>
-              <ClockCircleOutlined style={{ marginRight: 4 }} />
-              Unread
-            </>
-          )}
-        </Tag>
       </div>
 
       {/* ── Amount pill ── */}
@@ -130,7 +94,6 @@ export default function DonationsPreview({ donation }) {
           gap: 10,
         }}
       >
-        <DollarOutlined style={{ color: green, fontSize: 18 }} />
         <span
           style={{
             fontFamily: "'Outfit', sans-serif",
@@ -148,8 +111,8 @@ export default function DonationsPreview({ donation }) {
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          gap: 2,
+          flexDirection: "row",
+          justifyContent: "space-between",
           marginBottom: 16,
         }}
       >
@@ -261,6 +224,7 @@ export default function DonationsPreview({ donation }) {
           borderRadius: 8,
           padding: "12px 14px",
           marginBottom: 20,
+          height: 140,
         }}
       >
         <p
@@ -281,7 +245,6 @@ export default function DonationsPreview({ donation }) {
       {/* ── Actions ── */}
       <div style={{ display: "flex", gap: 8 }}>
         <Button
-          icon={<MailOutlined />}
           href={`mailto:${donation.email}`}
           type="primary"
           size="small"

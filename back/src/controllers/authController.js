@@ -2,7 +2,6 @@ import UserModel from "../models/User.js";
 import { connectDB } from "../config/db.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 
 dotenv.config();
 

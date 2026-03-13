@@ -20,6 +20,11 @@ import {
   fetchVolunteers,
   updateVolunteer,
 } from "../controllers/volunteerController.js";
+import {
+  fetchDonations,
+  createDonation,
+  fetchDonation,
+} from "../controllers/donationsController.js";
 
 const router = express.Router();
 
@@ -42,5 +47,10 @@ router.delete("/delete-media/:id", protectRoute, deleteMedia);
 router.post("/create-volunteer", createVolunteer);
 router.get("/fetch-volunteers", protectRoute, fetchVolunteers);
 router.post("/volunteers/mark-record/:id", protectRoute, updateVolunteer);
+
+//donation routes
+router.post("/create-donation", createDonation);
+router.get("/fetch-donations", protectRoute, fetchDonations);
+router.get("/fetch-donation/:id", protectRoute, fetchDonation);
 
 export { router as Router };

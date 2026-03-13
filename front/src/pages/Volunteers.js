@@ -180,6 +180,12 @@ function Volunteers() {
     // eslint-disable-next-line
   }, [volunteers, search, statusFilter]);
 
+  const allFiltered = useMemo(
+    () => applySearch(volunteers ?? []),
+    // eslint-disable-next-line
+    [volunteers, search],
+  );
+
   const columns = [
     {
       title: "",
@@ -387,7 +393,7 @@ function Volunteers() {
     },
   ];
 
-  const totalFiltered = unreadFiltered.length + readFiltered.length;
+  const totalFiltered = volunteers.length;
   return (
     <>
       <style>{globalStyles}</style>
@@ -451,7 +457,11 @@ function Volunteers() {
             value={unread}
             label="Unread"
             color={accent}
-            sub={unread > 0 ? `${unread} need attention` : "All caught up"}
+            sub={
+              unread > 0
+                ? `needs attention`
+                : ""
+            }
           />
           <VolunteerStatCard
             icon={<CheckCircleOutlined />}
@@ -529,8 +539,8 @@ function Volunteers() {
               openModal={openModal}
               loading={loading}
               columns={columns}
-              filtered={readFiltered}
-              emptyMessage={"No  submissions match your search"}
+              filtered={allFiltered}
+              emptyMessage={"No submissions match your search"}
             />
           ) : (
             <Collapse

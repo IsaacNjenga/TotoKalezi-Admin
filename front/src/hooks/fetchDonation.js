@@ -2,25 +2,25 @@ import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { useCallback, useState } from "react";
 
-function useFetchMedia() {
-  const [media, setMedia] = useState({});
+function useFetchDonation() {
+  const [donation, setDonation] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
 
-  const fetchMedia = useCallback(
-    async (mediaId) => {
-      if (!mediaId) return;
+  const fetchDonation = useCallback(
+    async (donationId) => {
+      if (!donationId) return;
       setLoading(true);
       try {
-        const res = await axios.get(`/fetch-media/${mediaId}`);
+        const res = await axios.get(`/fetch-donation/${donationId}`);
         if (res.data.success) {
-          setMedia(res.data.media);
+          setDonation(res.data.donation);
         }
       } catch (error) {
-        console.log("Error fetching media", error);
+        console.log("Error fetching donation", error);
         openNotification(
           "error",
-          "There was an error fetching media. Please try again later.",
+          "There was an error fetching donation. Please try again later.",
           "Error",
         );
       } finally {
@@ -30,7 +30,7 @@ function useFetchMedia() {
     [openNotification],
   );
 
-  return { media, loading, fetchMedia };
+  return { donation, loading, fetchDonation };
 }
 
-export default useFetchMedia;
+export default useFetchDonation;

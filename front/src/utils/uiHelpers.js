@@ -28,6 +28,11 @@ export const primaryMid = "rgba(133,74,154,0.25)";
 export const accent = "#fea549";
 export const accentDim = "rgba(254,165,73,0.12)";
 export const accentMid = "rgba(254,165,73,0.25)";
+export const green = "#27ae60";
+export const greenDim = "rgba(39,174,96,0.1)";
+export const blue = "#2980b9";
+export const blueDim = "rgba(41,128,185,0.1)";
+export const dark = "rgb(7,20,60)";
 
 // ── Masonry grid ─────────────────────────────────────────────────
 export const Masonry = ({ items, columns = 4, gap = 14, renderItem }) => {
@@ -697,4 +702,76 @@ export const globalStyles = `
 .vol-table .ant-select-selector {
   height: 12px !important;
 }
+
+ .don-table .ant-table { font-family: 'Outfit', sans-serif !important; }
+  .don-table .ant-table-thead > tr > th {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 11px !important; font-weight: 700 !important;
+    letter-spacing: 0.1em !important; text-transform: uppercase !important;
+    color: #888 !important; background: #faf8fc !important;
+    border-bottom: 1px solid rgba(133,74,154,0.1) !important;
+    padding: 12px 16px !important;
+  }
+  .don-table .ant-table-tbody > tr > td {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 13px !important; padding: 12px 16px !important;
+    border-bottom: 1px solid rgba(133,74,154,0.06) !important;
+    transition: background 0.2s ease !important;
+  }
+  .don-table .ant-table-tbody > tr:hover > td { background: ${primaryDim} !important; }
+  .don-table .ant-table-tbody > tr.unread-row > td { background: rgba(133,74,154,0.03) !important; }
+  .don-table .ant-table-tbody > tr.unread-row:hover > td { background: ${primaryDim} !important; }
+  .don-table .ant-pagination { font-family: 'Outfit', sans-serif !important; padding: 12px 16px !important; }
+  .don-table .ant-pagination-item-active { border-color: ${primary} !important; }
+  .don-table .ant-pagination-item-active a { color: ${primary} !important; }
+
+  .don-collapse .ant-collapse-item {
+    border-bottom: 1px solid rgba(133,74,154,0.08) !important;
+  }
+  .don-collapse .ant-collapse-item:last-child { border-bottom: none !important; }
+  .don-collapse .ant-collapse-header {
+    background: #faf8fc !important;
+    transition: background 0.2s ease !important;
+  }
+  .don-collapse .ant-collapse-header:hover { background: ${primaryDim} !important; }
+  .don-collapse .ant-collapse-item-active .ant-collapse-header {
+    background: ${primaryDim} !important;
+    border-bottom: 1px solid ${primaryMid} !important;
+  }
+  .don-collapse .ant-collapse-arrow { color: ${primary} !important; }
+
+  .don-search .ant-input-affix-wrapper {
+    border-radius: 8px !important;
+    border-color: rgba(133,74,154,0.2) !important;
+    font-family: 'Outfit', sans-serif !important;
+  }
+  .don-search .ant-input-affix-wrapper:focus-within {
+    border-color: ${primary} !important;
+    box-shadow: 0 0 0 3px ${primaryDim} !important;
+  }
+  .don-search .ant-input-prefix { color: rgba(133,74,154,0.45) !important; }
+  .don-filter .ant-select-selector {
+    border-color: rgba(133,74,154,0.2) !important;
+    border-radius: 8px !important;
+    font-family: 'Outfit', sans-serif !important;
+  }
+  .don-filter.ant-select-focused .ant-select-selector,
+  .don-filter .ant-select-selector:hover { border-color: ${primary} !important; }
+
+   @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .dash-stat-card { transition: all 0.25s ease !important; animation: fadeUp 0.5s ease both; }
+  .dash-stat-card:hover { transform: translateY(-3px) !important; box-shadow: 0 12px 32px rgba(0,0,0,0.1) !important; }
+  .dash-activity-row { transition: background 0.2s ease; border-radius: 8px; }
+  .dash-activity-row:hover { background: ${primaryDim} !important; }
+  .dash-bar { transition: filter 0.2s ease, opacity 0.2s ease; }
+  .dash-bar:hover { filter: brightness(1.15) !important; opacity: 0.9; }
+  .media-thumb:hover .media-thumb-overlay { opacity: 1 !important; }
   `;

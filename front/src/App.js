@@ -15,6 +15,7 @@ import EditMedia from "./pages/EditMedia";
 import EditAlbum from "./pages/EditAlbum";
 import Webpage from "./pages/Webpage";
 import Album from "./pages/Album";
+import AlbumPage from "./pages/AlbumPage";
 
 //axios.defaults.baseURL = process.env.REACT_APP_DEV_API_URL;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -48,6 +49,7 @@ function App() {
             <Route path="/media/create-album" element={<CreateAlbum />} />
             <Route path="/media/edit/:id" element={<EditMedia />} />
             <Route path="/media/edit-album/:id" element={<EditAlbum />} />
+            <Route path="/media/album/:id" element={<AlbumPage />} />
             <Route path="/volunteers" element={<Volunteers />} />
             <Route path="/media/albums" element={<Album />} />
             <Route path="/webpage-editor" element={<Webpage />} />

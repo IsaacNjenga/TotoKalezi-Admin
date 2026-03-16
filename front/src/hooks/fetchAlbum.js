@@ -21,10 +21,10 @@ function useFetchAlbum() {
           setAlbum(res.data.album);
         }
       } catch (error) {
-        console.log("Error fetching donation", error);
+        console.log("Error fetching album", error);
         openNotification(
           "error",
-          "There was an error fetching donation. Please try again later.",
+          "There was an error fetching album. Please try again later.",
           "Error",
         );
       } finally {

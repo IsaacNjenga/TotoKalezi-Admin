@@ -8,10 +8,13 @@ import Auth from "./pages/Auth";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Media from "./pages/Media";
 import CreateMedia from "./pages/CreateMedia";
+import CreateAlbum from "./pages/CreateAlbum";
 import Donations from "./pages/Donations";
 import Volunteers from "./pages/Volunteers";
 import EditMedia from "./pages/EditMedia";
+import EditAlbum from "./pages/EditAlbum";
 import Webpage from "./pages/Webpage";
+import Album from "./pages/Album";
 
 //axios.defaults.baseURL = process.env.REACT_APP_DEV_API_URL;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -42,8 +45,11 @@ function App() {
             <Route path="/donations" element={<Donations />} />
             <Route path="/media" element={<Media />} />
             <Route path="/media/create" element={<CreateMedia />} />
+            <Route path="/media/create-album" element={<CreateAlbum />} />
             <Route path="/media/edit/:id" element={<EditMedia />} />
+            <Route path="/media/edit-album/:id" element={<EditAlbum />} />
             <Route path="/volunteers" element={<Volunteers />} />
+            <Route path="/media/albums" element={<Album />} />
             <Route path="/webpage-editor" element={<Webpage />} />
           </Route>
         </Routes>

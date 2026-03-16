@@ -14,6 +14,7 @@ import {
   LeftSquareOutlined,
   RightSquareOutlined,
   CodeOutlined,
+  CameraOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "../contexts/AuthContext";
 import Swal from "sweetalert2";
@@ -52,11 +53,17 @@ const menuConfig = [
         path: "/media",
       },
       {
+        key: "/media/albums",
+        label: "View Albums",
+        icon: CameraOutlined,
+        path: "/media/albums",},
+      {
         key: "/media/create",
         label: "Upload Media",
         icon: VideoCameraAddOutlined,
         path: "/media/create",
       },
+      
     ],
   },
   {

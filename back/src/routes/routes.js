@@ -29,6 +29,7 @@ import {
   createAlbum,
   deleteAlbum,
   fetchAlbum,
+  fetchAlbumMedia,
   fetchAlbums,
   updateAlbum,
 } from "../controllers/albumController.js";
@@ -64,6 +65,7 @@ router.get("/fetch-donation/:id", protectRoute, fetchDonation);
 router.post("/create-album", protectRoute, createAlbum);
 router.get("/fetch-all-albums", protectRoute, fetchAlbums);
 router.get("/fetch-album/:id", protectRoute, fetchAlbum);
+router.get("/fetch-album-media", fetchAlbumMedia);
 router.put("/update-album/:id", protectRoute, updateAlbum);
 router.delete("/delete-album/:id", protectRoute, deleteAlbum);
 

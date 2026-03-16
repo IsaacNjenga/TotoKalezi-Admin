@@ -9,6 +9,7 @@ import {
   ReloadOutlined,
   TagOutlined,
   LoadingOutlined,
+  CameraOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useFetchAllMedia from "../hooks/fetchAllMedia.js";
@@ -215,7 +216,9 @@ function Media() {
                   color: primary,
                   fontFamily: "'Outfit', sans-serif",
                 }}
-              />
+              >
+                Refresh
+              </Button>
             </Tooltip>
             <Button
               type="primary"
@@ -235,6 +238,25 @@ function Media() {
               }}
             >
               Upload Media
+            </Button>{" "}
+            <Button
+              type="primary"
+              icon={<CameraOutlined />}
+              className="album-btn"
+              onClick={() => navigate("/media/create-album")}
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 600,
+                fontSize: 13,
+                letterSpacing: "0.04em",
+                background: `linear-gradient(135deg, #2f7041 0%, #66bc7e 100%)`,
+                border: "none",
+                borderRadius: 8,
+                boxShadow: "0 2px 12px rgba(133,74,154,0.3)",
+                transition: "all 0.25s ease",
+              }}
+            >
+              Create Album
             </Button>
           </div>
         </div>

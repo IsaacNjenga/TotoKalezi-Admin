@@ -14,10 +14,9 @@ const createMedia = async (req, res) => {
 
 const getAllMedia = async (req, res) => {
   try {
-    const media = await MediaModel.find().populate(
-      "createdBy",
-      "username email avatar _id",
-    );
+    const media = await MediaModel.find()
+      .populate("createdBy", "username email avatar _id")
+      .populate("albumId", "title description createdBy cover");
     return res.status(200).json({ success: true, media });
   } catch (error) {
     console.error("Error fetching media", error);
@@ -28,10 +27,9 @@ const getAllMedia = async (req, res) => {
 const getMedia = async (req, res) => {
   //   const { id } = req.query;
   try {
-    const media = await MediaModel.findById(req.params.id).populate(
-      "createdBy",
-      "username email avatar _id",
-    );
+    const media = await MediaModel.findById(req.params.id)
+      .populate("createdBy", "username email avatar _id")
+      .populate("albumId", "title description createdBy cover");
     if (!media) {
       return res.status(404).json({ message: "Media not found" });
     }

@@ -25,6 +25,13 @@ import {
   createDonation,
   fetchDonation,
 } from "../controllers/donationsController.js";
+import {
+  createAlbum,
+  deleteAlbum,
+  fetchAlbum,
+  fetchAlbums,
+  updateAlbum,
+} from "../controllers/albumController.js";
 
 const router = express.Router();
 
@@ -52,5 +59,12 @@ router.post("/volunteers/mark-record/:id", protectRoute, updateVolunteer);
 router.post("/create-donation", createDonation);
 router.get("/fetch-donations", protectRoute, fetchDonations);
 router.get("/fetch-donation/:id", protectRoute, fetchDonation);
+
+//album routes
+router.post("/create-album", protectRoute, createAlbum);
+router.get("/fetch-all-albums", protectRoute, fetchAlbums);
+router.get("/fetch-album/:id", protectRoute, fetchAlbum);
+router.put("/update-album/:id", protectRoute, updateAlbum);
+router.delete("/delete-album/:id", protectRoute, deleteAlbum);
 
 export { router as Router };

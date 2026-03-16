@@ -1,4 +1,11 @@
-import { Form, Input, Button, Upload, Select, Progress } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Upload,
+  Progress,
+  Radio,
+} from "antd";
 import {
   InboxOutlined,
   PictureOutlined,
@@ -78,7 +85,7 @@ function MediaForm({
   setPreviewUrl,
   setMediaType,
   setUploadProgress,
-  buttonText
+  buttonText,
 }) {
   return (
     <Form
@@ -399,6 +406,147 @@ function MediaForm({
       {/* ── MEDIA DETAILS ── */}
       <SectionCard title="Media Details" icon={<FileTextOutlined />}>
         <Form.Item
+          label="Media Type"
+          name="type"
+          rules={[{ required: true, message: "Please select a type" }]}
+          style={{ marginBottom: 16 }}
+        >
+          <Radio.Group
+            onChange={(e) => setMediaType(e.target.value)}
+            style={{ display: "flex", gap: 12 }}
+          >
+            {[
+              {
+                value: "image",
+                icon: <PictureOutlined />,
+                label: "Image",
+                color: primary,
+              },
+              {
+                value: "video",
+                icon: <VideoCameraOutlined />,
+                label: "Video",
+                color: accent,
+              },
+            ].map(({ value, icon, label, color }) => (
+              <Radio key={value} value={value} style={{ display: "none" }}>
+                {/* hidden — we use the card as the visual */}
+              </Radio>
+            ))}
+
+            {[
+              {
+                value: "image",
+                icon: <PictureOutlined />,
+                label: "Image",
+                color: primary,
+              },
+              {
+                value: "video",
+                icon: <VideoCameraOutlined />,
+                label: "Video",
+                color: accent,
+              },
+            ].map(({ value, icon, label, color }) => {
+              const selected = mediaType === value;
+              return (
+                <div
+                  key={value}
+                  onClick={() => {
+                    setMediaType(value);
+                    form.setFieldsValue({ type: value });
+                  }}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "14px 20px",
+                    borderRadius: 10,
+                    cursor: "pointer",
+                    border: `1.5px solid ${selected ? color : "rgba(133,74,154,0.15)"}`,
+                    background: selected ? `${color}12` : "#fff",
+                    boxShadow: selected ? `0 0 0 3px ${color}18` : "none",
+                    transition: "all 0.22s ease",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 9,
+                      flexShrink: 0,
+                      background: selected ? `${color}20` : "rgba(0,0,0,0.04)",
+                      border: `1px solid ${selected ? color + "40" : "transparent"}`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: selected ? color : "#bbb",
+                      fontSize: 16,
+                      transition: "all 0.22s ease",
+                    }}
+                  >
+                    {icon}
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: selected ? color : "#555",
+                        margin: 0,
+                        transition: "color 0.22s ease",
+                      }}
+                    >
+                      {label}
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: "'Outfit', sans-serif",
+                        fontSize: 10,
+                        color: selected ? `${color}99` : "#ccc",
+                        margin: 0,
+                      }}
+                    >
+                      {value === "image"
+                        ? "JPG, PNG, WEBP, GIF"
+                        : "MP4, MOV, WEBM"}
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      marginLeft: "auto",
+                      width: 16,
+                      height: 16,
+                      borderRadius: "50%",
+                      border: `2px solid ${selected ? color : "#ddd"}`,
+                      background: selected ? color : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      transition: "all 0.22s ease",
+                    }}
+                  >
+                    {selected && (
+                      <div
+                        style={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: "50%",
+                          background: "#fff",
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
           label="Title"
           name="title"
           rules={[{ required: true, message: "Please enter a title" }]}
@@ -435,52 +583,6 @@ function MediaForm({
             placeholder="Give a fitting description…"
             rows={3}
             style={{ resize: "none" }}
-          />
-        </Form.Item>
-
-        <Form.Item
-          label="Media Type"
-          name="type"
-          rules={[{ required: true, message: "Please select a type" }]}
-          style={{ marginBottom: 16 }}
-        >
-          <Select
-            placeholder="Select type"
-            size="large"
-            value={mediaType}
-            onChange={setMediaType}
-            options={[
-              {
-                label: (
-                  <span
-                    style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    <PictureOutlined style={{ color: primary }} /> Image
-                  </span>
-                ),
-                value: "image",
-              },
-              {
-                label: (
-                  <span
-                    style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    <VideoCameraOutlined style={{ color: accent }} /> Video
-                  </span>
-                ),
-                value: "video",
-              },
-            ]}
           />
         </Form.Item>
       </SectionCard>

@@ -13,6 +13,7 @@ import {
   SettingOutlined,
   LeftSquareOutlined,
   RightSquareOutlined,
+  CodeOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "../contexts/AuthContext";
 import Swal from "sweetalert2";
@@ -26,7 +27,6 @@ import {
 
 const { Header, Sider, Content } = Layout;
 
-// ── Menu config ──────────────────────────────────────────────────
 const menuConfig = [
   {
     key: "/",
@@ -42,12 +42,12 @@ const menuConfig = [
   },
   {
     key: "media-group",
-    label: "Media",
+    label: "Gallery",
     icon: VideoCameraOutlined,
     children: [
       {
         key: "/media",
-        label: "View Media",
+        label: "View Gallery",
         icon: PictureOutlined,
         path: "/media",
       },
@@ -64,6 +64,12 @@ const menuConfig = [
     label: "Volunteers",
     icon: UsergroupAddOutlined,
     path: "/volunteers",
+  },
+  {
+    key: "/webpage-editor",
+    label: "Site Editor",
+    icon: CodeOutlined,
+    path: "/webpage-editor",
   },
 ];
 

@@ -33,6 +33,7 @@ function CreateMedia() {
     handleRemoveFile,
     uploadToCloudinary,
     setUploadProgress,
+    setSelectedFile,
   } = useMediaUpload();
 
   const handleSubmit = async (values) => {
@@ -55,17 +56,21 @@ function CreateMedia() {
       const res = await axios.post("/create-media", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       if (res.data.success) {
         openNotification("success", "Media uploaded", "Success");
-        setTimeout(() => {
-          navigate("/media");
-        }, 1200);
+        // setTimeout(() => {
+        //   navigate("/media");
+        // }, 1200);
       }
     } catch (err) {
       openNotification("error", err.message, "Upload failed");
     } finally {
       setLoading(false);
+      form.resetFields();
+      setFileList([]);
+      setPreviewUrl(null);
+      setSelectedFile(null);
     }
   };
 

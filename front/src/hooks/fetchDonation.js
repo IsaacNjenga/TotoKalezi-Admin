@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { useCallback, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 function useFetchDonation() {
+  const { token } = useAuth();
   const [donation, setDonation] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
@@ -12,7 +14,9 @@ function useFetchDonation() {
       if (!donationId) return;
       setLoading(true);
       try {
-        const res = await axios.get(`/fetch-donation/${donationId}`);
+        const res = await axios.get(`/fetch-donation/${donationId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (res.data.success) {
           setDonation(res.data.donation);
         }

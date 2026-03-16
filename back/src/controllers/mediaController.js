@@ -26,7 +26,7 @@ const getAllMedia = async (req, res) => {
 };
 
 const getMedia = async (req, res) => {
-//   const { id } = req.query;
+  //   const { id } = req.query;
   try {
     const media = await MediaModel.findById(req.params.id).populate(
       "createdBy",
@@ -43,7 +43,7 @@ const getMedia = async (req, res) => {
 };
 
 const updateMedia = async (req, res) => {
-//   const { id } = req.query;
+  //   const { id } = req.query;
   try {
     const media = await MediaModel.findByIdAndUpdate(
       req.params.id,
@@ -61,13 +61,15 @@ const updateMedia = async (req, res) => {
 };
 
 const deleteMedia = async (req, res) => {
-//   const { id } = req.query;
+  //   const { id } = req.query;
   try {
     const media = await MediaModel.findByIdAndDelete(req.params.id);
     if (!media) {
       return res.status(404).json({ message: "Media not found" });
     }
-    return res.status(200).json({ success: true, media });
+    return res
+      .status(200)
+      .json({ success: true, message: "Media deleted successfully!" });
   } catch (error) {
     console.error("Error deleting media", error);
     return res.status(500).json({ message: "Internal server error" });

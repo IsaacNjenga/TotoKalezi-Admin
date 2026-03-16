@@ -38,6 +38,7 @@ function EditMedia() {
     handleRemoveFile,
     uploadToCloudinary,
     setUploadProgress,
+    setSelectedFile,
   } = useMediaUpload();
 
   useEffect(() => {
@@ -100,6 +101,10 @@ function EditMedia() {
       openNotification("error", err.message, "Update failed");
     } finally {
       setLoading(false);
+      form.resetFields();
+      setFileList([]);
+      setPreviewUrl(null);
+      setSelectedFile(null);
     }
   };
 

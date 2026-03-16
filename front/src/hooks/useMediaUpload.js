@@ -65,5 +65,6 @@ export default function useMediaUpload() {
     handleRemoveFile,
     uploadToCloudinary,
     setUploadProgress,
+    setSelectedFile,
   };
 }

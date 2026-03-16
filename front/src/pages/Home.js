@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { Avatar } from "antd";
+import { useMemo } from "react";
 import {
   CreditCardOutlined,
   TeamOutlined,
@@ -7,7 +6,6 @@ import {
   ArrowUpOutlined,
   HeartOutlined,
   EyeOutlined,
-  StarFilled,
 } from "@ant-design/icons";
 import useFetchAllDonations from "../hooks/fetchAllDonations";
 import useFetchAllVolunteers from "../hooks/fetchVolunteers";
@@ -24,6 +22,7 @@ import {
   blueDim,
   dark,
 } from "../utils/uiHelpers";
+import { Image } from "antd";
 
 // ── Helpers ──────────────────────────────────────────────────────
 function timeAgo(dateStr) {
@@ -375,12 +374,7 @@ function Home() {
         : null,
     [donations],
   );
-  const starred = useMemo(
-    () => donations?.filter((d) => d.isStarred).slice(0, 5) ?? [],
-    [donations],
-  );
 
-  const totalUnread = unreadDon + unreadVol;
   const isLoading = dl || vl || ml;
 
   const donationChart = useMemo(() => {
@@ -541,43 +535,10 @@ function Home() {
               </p>
             </div>
             <div style={{ textAlign: "right" }}>
-              {totalUnread > 0 && (
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "8px 16px",
-                    borderRadius: 10,
-                    background: "rgba(254,165,73,0.15)",
-                    border: "1px solid rgba(254,165,73,0.3)",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: "50%",
-                      background: accent,
-                      boxShadow: `0 0 8px ${accent}`,
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontFamily: "'Outfit', sans-serif",
-                      fontSize: 12,
-                      fontWeight: 600,
-                      color: accent,
-                    }}
-                  >
-                    {totalUnread} unread item{totalUnread !== 1 ? "s" : ""}
-                  </span>
-                </div>
-              )}
               <p
                 style={{
                   fontFamily: "'Outfit', sans-serif",
-                  fontSize: 11,
+                  fontSize: 14,
                   color: "rgba(214, 202, 202, 0.92)",
                   margin: "8px 0 0",
                 }}
@@ -623,7 +584,7 @@ function Home() {
             delay={240}
             icon={<PictureOutlined />}
             value={isLoading ? "—" : (media?.length ?? 0)}
-            label="Media Items"
+            label="Gallery Items"
             color={blue}
           />
         </div>
@@ -839,113 +800,6 @@ function Home() {
 
         {/* ── Starred + Media ── */}
         <div style={{ display: "flex", gap: 14 }}>
-          {/* Starred donations */}
-          <Card delay={320} style={{ flex: 1 }}>
-            <SectionHeading title="Starred Donations" />
-            {starred.length === 0 ? (
-              <p
-                style={{
-                  fontFamily: "'Outfit', sans-serif",
-                  fontSize: 13,
-                  color: "#ccc",
-                  textAlign: "center",
-                  padding: "20px 0",
-                  margin: 0,
-                }}
-              >
-                No starred donations yet
-              </p>
-            ) : (
-              starred.map((d, i) => {
-                const initials = d.name
-                  ?.split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()
-                  .slice(0, 2);
-                return (
-                  <div
-                    key={d._id}
-                    className="dash-activity-row"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 12,
-                      padding: "9px 10px",
-                      marginBottom: 2,
-                      animation: "fadeUp 0.4s ease both",
-                      animationDelay: `${i * 60}ms`,
-                    }}
-                  >
-                    <Avatar
-                      size={32}
-                      style={{
-                        background: `linear-gradient(135deg, ${primary}, #a066bc)`,
-                        fontSize: 11,
-                        fontWeight: 700,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {initials}
-                    </Avatar>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p
-                        style={{
-                          fontFamily: "'Outfit', sans-serif",
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "#333",
-                          margin: 0,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {d.name}
-                      </p>
-                      <p
-                        style={{
-                          fontFamily: "'Outfit', sans-serif",
-                          fontSize: 11,
-                          color: "#aaa",
-                          margin: 0,
-                        }}
-                      >
-                        {d.email}
-                      </p>
-                    </div>
-                    <div style={{ textAlign: "right", flexShrink: 0 }}>
-                      <p
-                        style={{
-                          fontFamily: "'Outfit', sans-serif",
-                          fontSize: 13,
-                          fontWeight: 700,
-                          color: green,
-                          margin: 0,
-                        }}
-                      >
-                        KES {d.amount?.toLocaleString()}
-                      </p>
-                      <p
-                        style={{
-                          fontFamily: "'Outfit', sans-serif",
-                          fontSize: 10,
-                          color: "#ccc",
-                          margin: 0,
-                        }}
-                      >
-                        {timeAgo(d.createdAt)}
-                      </p>
-                    </div>
-                    <StarFilled
-                      style={{ color: "#f39c12", fontSize: 13, flexShrink: 0 }}
-                    />
-                  </div>
-                );
-              })
-            )}
-          </Card>
-
           {/* Media snapshot */}
           <Card delay={360} style={{ flex: 1 }}>
             <SectionHeading title="Recent Media" />
@@ -985,9 +839,10 @@ function Home() {
                       <EyeOutlined style={{ color: primary, fontSize: 18 }} />
                     </div>
                   ) : (
-                    <img
+                    <Image
                       src={m.url}
                       alt={m.title}
+                      preview={true}
                       style={{
                         width: "100%",
                         height: "100%",

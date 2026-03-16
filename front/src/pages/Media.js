@@ -49,7 +49,7 @@ function Media() {
     setDeleteLoading(true);
     try {
       const res = await axios.delete(`delete-media/${id}`, {
-        header: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
         openNotification("success", "Deleted successfully", "Done!");

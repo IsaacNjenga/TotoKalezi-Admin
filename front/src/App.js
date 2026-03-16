@@ -11,6 +11,7 @@ import CreateMedia from "./pages/CreateMedia";
 import Donations from "./pages/Donations";
 import Volunteers from "./pages/Volunteers";
 import EditMedia from "./pages/EditMedia";
+import Webpage from "./pages/Webpage";
 
 //axios.defaults.baseURL = process.env.REACT_APP_DEV_API_URL;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -43,6 +44,7 @@ function App() {
             <Route path="/media/create" element={<CreateMedia />} />
             <Route path="/media/edit/:id" element={<EditMedia />} />
             <Route path="/volunteers" element={<Volunteers />} />
+            <Route path="/webpage-editor" element={<Webpage />} />
           </Route>
         </Routes>
       )}

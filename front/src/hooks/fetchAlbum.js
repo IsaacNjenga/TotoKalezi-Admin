@@ -7,7 +7,6 @@ function useFetchAlbum() {
   const { token, isAuthenticated } = useAuth();
   const [album, setAlbum] = useState({});
   const [loading, setLoading] = useState(false);
-  // const [refreshKey, setRefreshKey] = useState(0);
   const openNotification = useNotification();
 
   const fetchAlbum = useCallback(

@@ -19,7 +19,7 @@ import {
   accent,
   globalStyles,
   Masonry,
-  MediaCard,
+  AlbumPageMediaCard,
 } from "../utils/uiHelpers";
 import LoadingComponent from "../components/LoadingComponent";
 import { useAuth } from "../contexts/AuthContext";
@@ -46,7 +46,7 @@ function AlbumPage() {
   useEffect(() => {
     if (id) fetchAlbum(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,refreshKey]);
+  }, [id, refreshKey]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const media = album?.media ?? [];
@@ -102,6 +102,31 @@ function AlbumPage() {
       openNotification(
         "Error deleting media",
         "An error occurred while trying to delete the album. Please try again.",
+      );
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleRemove = async (_id) => {
+    setDeleteLoading(true);
+    try {
+      const mediaId = _id._id;
+      const res = await axios.delete(
+        `delete-album-media/${id}?mediaId=${mediaId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      if (res.data.success) {
+        // openNotification("success", "Removed successfully", "Done!");
+        setRefreshKey((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error("Error removing media", error);
+      openNotification(
+        "Error removing media",
+        "An error occurred while trying to remove the media. Please try again.",
       );
     } finally {
       setDeleteLoading(false);
@@ -514,7 +539,11 @@ function AlbumPage() {
                   items={filtered}
                   columns={4}
                   renderItem={(item) => (
-                    <MediaCard key={item._id} item={item} />
+                    <AlbumPageMediaCard
+                      key={item._id}
+                      item={item}
+                      onDelete={handleRemove}
+                    />
                   )}
                 />
               </Image.PreviewGroup>
@@ -535,7 +564,11 @@ function AlbumPage() {
         setOpen={setOpenMediaModal}
         width={1000}
         component={
-          <AllMediaPreview id={id} setOpenMediaModal={setOpenMediaModal} setRefreshKey={setRefreshKey} />
+          <AllMediaPreview
+            id={id}
+            setOpenMediaModal={setOpenMediaModal}
+            setRefreshKey={setRefreshKey}
+          />
         }
       />
     </>

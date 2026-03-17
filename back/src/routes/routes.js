@@ -31,6 +31,7 @@ import {
   deleteAlbum,
   fetchAlbum,
   fetchAlbums,
+  removeFromAlbum,
   updateAlbum,
 } from "../controllers/albumController.js";
 
@@ -68,5 +69,6 @@ router.get("/fetch-album/:id", protectRoute, fetchAlbum);
 router.put("/update-album-media/:id", protectRoute, addToAlbum);
 router.put("/update-album/:id", protectRoute, updateAlbum);
 router.delete("/delete-album/:id", protectRoute, deleteAlbum);
+router.delete("/delete-album-media/:id", protectRoute, removeFromAlbum);
 
 export { router as Router };

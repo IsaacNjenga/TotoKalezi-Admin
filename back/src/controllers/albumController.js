@@ -134,6 +134,41 @@ const addToAlbum = async (req, res) => {
   }
 };
 
+const removeFromAlbum = async (req, res) => {
+  try {
+    const albumId = req.params.id;
+    const { mediaId } = req.query;
+
+    if (!mediaId) {
+      return res.status(400).json({ message: "mediaId is required" });
+    }
+
+    // 1. Ensure album exists
+    const album = await AlbumModel.findById(albumId);
+    if (!album) {
+      return res.status(404).json({ message: "Album not found" });
+    }
+
+    // 2. Remove from album.media array (if you're storing it)
+    await AlbumModel.findByIdAndUpdate(albumId, {
+      $pull: { media: mediaId },
+    });
+
+    // 3. Remove album reference from media
+    await MediaModel.findByIdAndUpdate(mediaId, {
+      $unset: { albumId: "" }, // or set to null
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Media removed from album successfully",
+    });
+  } catch (error) {
+    console.error("Error removing media from album", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const updateAlbum = async (req, res) => {
   try {
     const album = await AlbumModel.findByIdAndUpdate(
@@ -174,4 +209,5 @@ export {
   updateAlbum,
   deleteAlbum,
   addToAlbum,
+  removeFromAlbum,
 };

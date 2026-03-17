@@ -240,6 +240,100 @@ export const MediaCard = ({ item, onDelete }) => {
   );
 };
 
+export const AlbumPageMediaCard = ({ item, onDelete }) => {
+  const isVideo = item.type === "video";
+
+  return (
+    <Image.PreviewGroup>
+      <div className="media-card-wrap">
+        {isVideo ? (
+          <>
+            <video
+              src={item.url}
+              style={{
+                width: "100%",
+                height: 200,
+                objectFit: "cover",
+                borderRadius: 10,
+              }}
+              muted
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%,-50%)",
+                color: "rgba(255,255,255,0.85)",
+                fontSize: 40,
+                pointerEvents: "none",
+                filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.6))",
+              }}
+            >
+              <PlayCircleFilled />
+            </div>
+          </>
+        ) : (
+          <Image
+            src={item.url}
+            alt={item.title}
+            style={{
+              width: "100%",
+              objectFit: "cover",
+              borderRadius: 10,
+              display: "block",
+            }}
+            preview={{
+              cover: <EyeOutlined style={{ fontSize: 20 }} />,
+            }}
+          />
+        )}
+
+        {/* Hover overlay */}
+        <div className="media-overlay">
+          {/* Title */}
+          <p
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#fff",
+              margin: "0 0 4px",
+              lineHeight: 1.3,
+            }}
+          >
+            {item.title}
+          </p>
+
+          {/* Delete row */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            {/* Action buttons */}
+            <div style={{ display: "flex", gap: 6 }}>
+              <Tooltip title="Remove from album">
+                <button
+                  className="media-action-btn delete-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete?.(item);
+                  }}
+                >
+                  <DeleteOutlined />
+                </button>
+              </Tooltip>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Image.PreviewGroup>
+  );
+};
+
 // ── Stat card ────────────────────────────────────────────────────
 export const MediaStatCard = ({ icon, value, label, color }) => {
   return (
@@ -553,7 +647,7 @@ export const AlbumCard = ({ album, onView, onDelete, delay = 1 }) => {
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
-              height:30
+              height: 30,
             }}
           >
             {album.description}

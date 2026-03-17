@@ -66,6 +66,11 @@ function Media() {
     }
   };
 
+  const contributors = useMemo(
+    () => new Set(media?.map((a) => a.createdBy?._id)).size,
+    [media],
+  );
+
   const images = useMemo(
     () => media?.filter((m) => m.type === "image") ?? [],
     [media],
@@ -277,8 +282,8 @@ function Media() {
           />
           <MediaStatCard
             icon={<UserOutlined />}
-            value={new Set(media?.map((m) => m.createdBy?._id)).size}
-            label="Contributors"
+            value={contributors}
+            label={contributors === 1 ? "Contributor" : "Contributors"}
             color={accent}
           />
           <MediaStatCard

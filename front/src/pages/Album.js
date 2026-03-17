@@ -174,7 +174,7 @@ function Album() {
           <AlbumStatCard
             icon={<UserOutlined />}
             value={contributors}
-            label="Contributors"
+            label={contributors === 1 ? "Contributor" : "Contributors"}
             color={accent}
           />
           <AlbumStatCard

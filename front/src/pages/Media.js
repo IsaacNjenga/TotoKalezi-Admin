@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Tabs, Input, Select, Empty, Tooltip, Tag, Button, Modal } from "antd";
+import { Tabs, Input, Select, Empty, Tooltip, Tag, Button } from "antd";
 import {
   PictureOutlined,
   VideoCameraOutlined,
@@ -8,8 +8,7 @@ import {
   PlusOutlined,
   ReloadOutlined,
   TagOutlined,
-  LoadingOutlined,
-  CameraOutlined,
+  FileImageOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useFetchAllMedia from "../hooks/fetchAllMedia.js";
@@ -27,6 +26,7 @@ import {
   MediaCard,
   Masonry,
 } from "../utils/uiHelpers";
+import DeleteModal from "../components/DeleteModal.js";
 
 // ── Main ─────────────────────────────────────────────────────────
 function Media() {
@@ -241,7 +241,7 @@ function Media() {
             </Button>{" "}
             <Button
               type="primary"
-              icon={<CameraOutlined />}
+              icon={<FileImageOutlined />}
               className="album-btn"
               onClick={() => navigate("/media/create-album")}
               style={{
@@ -410,63 +410,13 @@ function Media() {
           </div>
         )}
 
-        {/* ── Delete confirmation modal ── */}
-        <Modal
-          open={!!deleteTarget}
-          onCancel={() => setDeleteTarget(null)}
-          onOk={async () => {
-            handleMediaDelete(deleteTarget._id);
-            setDeleteTarget(null);
-            setTimeout(() => {
-              refresh();
-            }, 1000);
-          }}
-          okText={deleteLoading ? <LoadingOutlined /> : "Delete"}
-          okButtonProps={{
-            danger: true,
-            style: {
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 600,
-              borderRadius: 8,
-            },
-          }}
-          cancelButtonProps={{
-            style: { fontFamily: "'Outfit', sans-serif", borderRadius: 8 },
-          }}
-          title={
-            <span
-              style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700 }}
-            >
-              Delete Media
-            </span>
-          }
-          centered
-        >
-          <p
-            style={{
-              fontFamily: "'Outfit', sans-serif",
-              fontSize: 14,
-              color: "#555",
-            }}
-          >
-            Are you sure you want to delete{" "}
-            <strong>"{deleteTarget?.title}"</strong>? This action cannot be
-            undone.
-          </p>
-          {deleteTarget?.url && (
-            <img
-              src={deleteTarget.url}
-              alt=""
-              style={{
-                width: "100%",
-                maxHeight: 180,
-                objectFit: "cover",
-                borderRadius: 8,
-                marginTop: 8,
-              }}
-            />
-          )}
-        </Modal>
+        <DeleteModal
+          deleteTarget={deleteTarget}
+          setDeleteTarget={setDeleteTarget}
+          handleDelete={handleMediaDelete}
+          refresh={refresh}
+          deleteLoading={deleteLoading}
+        />
 
         {/* ── Media preview modal ── */}
         {mediaContent && (

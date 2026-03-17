@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Button, Input, Select, Tooltip, Empty, Modal } from "antd";
+import { Button, Input, Select, Tooltip, Empty } from "antd";
 import {
   SearchOutlined,
   ReloadOutlined,
@@ -9,7 +9,6 @@ import {
   FileImageOutlined,
   AppstoreOutlined,
   UnorderedListOutlined,
-  LoadingOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useFetchAllAlbums from "../hooks/fetchAllAlbums";
@@ -27,6 +26,7 @@ import DetailsModal from "../components/DetailsModal";
 import { useAuth } from "../contexts/AuthContext";
 import { useNotification } from "../contexts/NotificationContext";
 import axios from "axios";
+import DeleteModal from "../components/DeleteModal";
 
 function Album() {
   const { albums, loading, refresh } = useFetchAllAlbums();
@@ -41,7 +41,7 @@ function Album() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const handleMediaDelete = async (id) => {
+  const handleDelete = async (id) => {
     setDeleteLoading(true);
     try {
       const res = await axios.delete(`delete-album/${id}`, {
@@ -91,7 +91,7 @@ function Album() {
   }, [albums, search, sortBy]);
 
   const openView = (album) => {
-    navigate(`/media/album/${album._id}`)
+    navigate(`/media/album/${album._id}`);
     setSelected(album);
   };
 
@@ -366,60 +366,20 @@ function Album() {
       <DetailsModal
         open={!!selected}
         setOpen={setSelected}
-        component={<AlbumDetail album={selected} setDeleteTarget={setDeleteTarget}/>}
-        refresh={refresh}width={800}
+        component={
+          <AlbumDetail album={selected} setDeleteTarget={setDeleteTarget} />
+        }
+        refresh={refresh}
+        width={800}
       />
 
-      {/* ── Delete confirm modal ── */}
-      <Modal
-        open={!!deleteTarget}
-        onCancel={() => setDeleteTarget(null)}
-        onOk={() => {
-          handleMediaDelete(deleteTarget._id);
-          setDeleteTarget(null);
-        }}
-        centered
-        okText={deleteLoading ? <LoadingOutlined /> : "Delete"}
-        okButtonProps={{
-          danger: true,
-          style: {
-            fontFamily: "'Outfit', sans-serif",
-            fontWeight: 600,
-            borderRadius: 8,
-          },
-        }}
-        cancelButtonProps={{
-          style: { fontFamily: "'Outfit', sans-serif", borderRadius: 8 },
-        }}
-        title={
-          <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700 }}>
-            Delete Album
-          </span>
-        }
-      >
-        <p
-          style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontSize: 14,
-            color: "#555",
-          }}
-        >
-          Are you sure you want to delete? This action cannot be undone.
-        </p>
-        {deleteTarget?.cover && (
-          <img
-            src={deleteTarget.cover}
-            alt=""
-            style={{
-              width: "100%",
-              maxHeight: 140,
-              objectFit: "cover",
-              borderRadius: 8,
-              marginTop: 8,
-            }}
-          />
-        )}
-      </Modal>
+      <DeleteModal
+        deleteTarget={deleteTarget}
+        setDeleteTarget={setDeleteTarget}
+        handleDelete={handleDelete}
+        refresh={refresh}
+        deleteLoading={deleteLoading}
+      />
     </>
   );
 }

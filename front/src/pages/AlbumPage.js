@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useFetchAlbum from "../hooks/fetchAlbum";
-import { Spin, Avatar, Image, Input, Select, Empty } from "antd";
+import { Avatar, Image, Input, Select, Empty } from "antd";
 import {
   ArrowLeftOutlined,
   PictureOutlined,
@@ -20,13 +20,23 @@ import {
   Masonry,
   MediaCard,
 } from "../utils/uiHelpers";
+import LoadingComponent from "../components/LoadingComponent";
+import { useAuth } from "../contexts/AuthContext";
+import { useNotification } from "../contexts/NotificationContext";
+import axios from "axios";
+import DeleteModal from "../components/DeleteModal";
 
 function AlbumPage() {
   const { id } = useParams();
+  const { token } = useAuth();
   const navigate = useNavigate();
+
+  const openNotification = useNotification();
   const { album, loading, fetchAlbum } = useFetchAlbum();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     if (id) fetchAlbum(id);
@@ -72,7 +82,28 @@ function AlbumPage() {
       })
     : "";
 
-  if (loading) return <Spin fullscreen tip="Loading..." />;
+  const handleDelete = async (id) => {
+    setDeleteLoading(true);
+    try {
+      const res = await axios.delete(`delete-album/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data.success) {
+        openNotification("success", "Deleted successfully", "Done!");
+        navigate("/media/albums");
+      }
+    } catch (error) {
+      console.error("Error deleting album", error);
+      openNotification(
+        "Error deleting media",
+        "An error occurred while trying to delete the album. Please try again.",
+      );
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  if (loading) return <LoadingComponent />;
 
   return (
     <>
@@ -319,7 +350,7 @@ function AlbumPage() {
                   <button
                     className="ap-delete-btn"
                     onClick={() => {
-                      //todo
+                      setDeleteTarget(album);
                     }}
                     style={{
                       display: "flex",
@@ -464,6 +495,13 @@ function AlbumPage() {
           </div>
         </div>
       </div>
+
+      <DeleteModal
+        deleteTarget={deleteTarget}
+        setDeleteTarget={setDeleteTarget}
+        handleDelete={handleDelete}
+        deleteLoading={deleteLoading}
+      />
     </>
   );
 }

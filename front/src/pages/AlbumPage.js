@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useFetchAlbum from "../hooks/fetchAlbum";
-import { Avatar, Image, Input, Select, Empty } from "antd";
+import { Avatar, Image, Input, Select, Empty, Button } from "antd";
 import {
   ArrowLeftOutlined,
   PictureOutlined,
@@ -10,6 +10,7 @@ import {
   SearchOutlined,
   EditOutlined,
   DeleteOutlined,
+  FileAddFilled,
 } from "@ant-design/icons";
 import {
   primary,
@@ -25,6 +26,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNotification } from "../contexts/NotificationContext";
 import axios from "axios";
 import DeleteModal from "../components/DeleteModal";
+import AllMediaPreview from "../components/AllMediaPreview";
+import DetailsModal from "../components/DetailsModal";
 
 function AlbumPage() {
   const { id } = useParams();
@@ -37,11 +40,13 @@ function AlbumPage() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [openMediaModal, setOpenMediaModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     if (id) fetchAlbum(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id,refreshKey]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const media = album?.media ?? [];
@@ -436,6 +441,28 @@ function AlbumPage() {
             </div>
 
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <Button
+                icon={<FileAddFilled />}
+                type={"primary"}
+                style={{
+                  background: primary,
+                  border: `1px solid ${primary}`,
+                  color: "#fff",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 14px",
+                  borderRadius: 8,
+                  fontFamily: "'Outfit', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+                onClick={() => setOpenMediaModal(true)}
+              >
+                Add Media
+              </Button>
               {/* Search */}
               <div className="ap-search">
                 <Input
@@ -476,7 +503,7 @@ function AlbumPage() {
                         color: "#bbb",
                       }}
                     >
-                      No media found
+                      No media in this album
                     </span>
                   }
                 />
@@ -501,6 +528,15 @@ function AlbumPage() {
         setDeleteTarget={setDeleteTarget}
         handleDelete={handleDelete}
         deleteLoading={deleteLoading}
+      />
+
+      <DetailsModal
+        open={openMediaModal}
+        setOpen={setOpenMediaModal}
+        width={1000}
+        component={
+          <AllMediaPreview id={id} setOpenMediaModal={setOpenMediaModal} setRefreshKey={setRefreshKey} />
+        }
       />
     </>
   );

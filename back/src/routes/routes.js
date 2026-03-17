@@ -26,6 +26,7 @@ import {
   fetchDonation,
 } from "../controllers/donationsController.js";
 import {
+  addToAlbum,
   createAlbum,
   deleteAlbum,
   fetchAlbum,
@@ -64,6 +65,7 @@ router.get("/fetch-donation/:id", protectRoute, fetchDonation);
 router.post("/create-album", protectRoute, createAlbum);
 router.get("/fetch-all-albums", protectRoute, fetchAlbums);
 router.get("/fetch-album/:id", protectRoute, fetchAlbum);
+router.put("/update-album-media/:id", protectRoute, addToAlbum);
 router.put("/update-album/:id", protectRoute, updateAlbum);
 router.delete("/delete-album/:id", protectRoute, deleteAlbum);
 

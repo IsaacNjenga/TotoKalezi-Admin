@@ -8,7 +8,12 @@ function DetailsModal({ setOpen, component, open, width = 680, refresh }) {
       open={open}
       onCancel={() => {
         setOpen(false);
-        refresh();
+
+        if (refresh) {
+          refresh();
+        } else {
+          //don't fail
+        }
       }}
       centered
       footer={null}

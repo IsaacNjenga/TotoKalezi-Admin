@@ -16,7 +16,7 @@ function LoadingComponent() {
     };
   }, [index]);
 
-  return <Spin fullscreen description={text[index]} />;
+  return <Spin fullscreen description={text[index]} size="large" />;
 }
 
 export default LoadingComponent;

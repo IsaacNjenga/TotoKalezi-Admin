@@ -95,6 +95,7 @@ function Album() {
 
   return (
     <>
+      <pre>{JSON.stringify(albums, null, 2)}</pre>
       <style>{globalStyles}</style>
       <div style={{ padding: "0 0 40px", fontFamily: "'Outfit', sans-serif" }}>
         {/* ── Header ── */}

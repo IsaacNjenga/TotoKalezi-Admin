@@ -1,14 +1,17 @@
 import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 function useFetchAllMedia() {
+  const {isAuthenticated}=useAuth()
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const openNotification = useNotification();
 
   const fetchMedia = useCallback(async () => {
+    if(!isAuthenticated) return;
     setLoading(true);
     try {
       const res = await axios.get("/fetch-all-media");

@@ -30,7 +30,7 @@ function AlbumPage() {
 
   useEffect(() => {
     if (id) fetchAlbum(id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -297,6 +297,7 @@ function AlbumPage() {
                 <div style={{ display: "flex", gap: 6 }}>
                   <button
                     className="ap-action-btn"
+                    onClick={() => navigate(`/media/edit-album/${album._id}`)}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -317,6 +318,9 @@ function AlbumPage() {
                   </button>
                   <button
                     className="ap-delete-btn"
+                    onClick={() => {
+                      //todo
+                    }}
                     style={{
                       display: "flex",
                       alignItems: "center",

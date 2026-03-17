@@ -45,7 +45,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/donations" element={<Donations />} />
             <Route path="/media" element={<Media />} />
-            <Route path="/media/create" element={<CreateMedia />} />
+            <Route path="/media/create-media" element={<CreateMedia />} />
             <Route path="/media/create-album" element={<CreateAlbum />} />
             <Route path="/media/edit/:id" element={<EditMedia />} />
             <Route path="/media/edit-album/:id" element={<EditAlbum />} />

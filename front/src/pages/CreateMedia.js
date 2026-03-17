@@ -62,15 +62,15 @@ function CreateMedia() {
         // setTimeout(() => {
         //   navigate("/media");
         // }, 1200);
+        form.resetFields();
+        setFileList([]);
+        setPreviewUrl(null);
+        setSelectedFile(null);
       }
     } catch (err) {
       openNotification("error", err.message, "Upload failed");
     } finally {
       setLoading(false);
-      form.resetFields();
-      setFileList([]);
-      setPreviewUrl(null);
-      setSelectedFile(null);
     }
   };
 

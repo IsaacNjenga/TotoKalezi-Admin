@@ -4,13 +4,14 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function useFetchDonation() {
-  const { token } = useAuth();
+  const { token,isAuthenticated } = useAuth();
   const [donation, setDonation] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
 
   const fetchDonation = useCallback(
     async (donationId) => {
+      if (!isAuthenticated) return;
       if (!donationId) return;
       setLoading(true);
       try {
@@ -31,6 +32,7 @@ function useFetchDonation() {
         setLoading(false);
       }
     },
+    //eslint-disable-next-line
     [openNotification],
   );
 

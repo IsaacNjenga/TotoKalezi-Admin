@@ -1,14 +1,17 @@
 import axios from "axios";
 import { useNotification } from "../contexts/NotificationContext";
 import { useCallback, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 function useFetchMedia() {
+  const {isAuthenticated}=useAuth()
   const [media, setMedia] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
 
   const fetchMedia = useCallback(
     async (mediaId) => {
+      if (!isAuthenticated) return;
       if (!mediaId) return;
       setLoading(true);
       try {
@@ -27,6 +30,7 @@ function useFetchMedia() {
         setLoading(false);
       }
     },
+    //eslint-disable-next-line
     [openNotification],
   );
 

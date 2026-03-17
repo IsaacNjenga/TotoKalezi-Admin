@@ -58,10 +58,10 @@ const menuConfig = [
         icon: CameraOutlined,
         path: "/media/albums",},
       {
-        key: "/media/create",
+        key: "/media/create-media",
         label: "Upload Media",
         icon: VideoCameraAddOutlined,
-        path: "/media/create",
+        path: "/media/create-media",
       },
       
     ],

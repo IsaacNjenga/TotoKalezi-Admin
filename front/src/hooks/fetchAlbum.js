@@ -4,13 +4,14 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function useFetchAlbum() {
-  const { token } = useAuth();
+  const { token, isAuthenticated } = useAuth();
   const [album, setAlbum] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
 
   const fetchAlbum = useCallback(
     async (albumId) => {
+      if (!isAuthenticated) return;
       if (!albumId) return;
       setLoading(true);
       try {

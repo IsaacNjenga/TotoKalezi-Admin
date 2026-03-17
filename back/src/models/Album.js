@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const albumSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    cover: { type: String, required: false },
+    cover: { type: String, required: true },
     description: { type: String },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

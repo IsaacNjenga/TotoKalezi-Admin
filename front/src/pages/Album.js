@@ -36,7 +36,7 @@ function Album() {
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-  const [viewMode, setViewMode] = useState("list"); // "grid" | "list"
+  const [viewMode, setViewMode] = useState("grid"); // "grid" | "list"
   const [selected, setSelected] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -150,7 +150,7 @@ function Album() {
               type="primary"
               icon={<PlusOutlined />}
               className="add-album-btn"
-              onClick={() => navigate("/albums/create")}
+              onClick={() => navigate("/media/create-album")}
               style={{
                 fontFamily: "'Outfit', sans-serif",
                 fontWeight: 600,

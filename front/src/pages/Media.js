@@ -224,7 +224,7 @@ function Media() {
               type="primary"
               icon={<PlusOutlined />}
               className="upload-btn"
-              onClick={() => navigate("/media/create")}
+              onClick={() => navigate("/media/create-media")}
               style={{
                 fontFamily: "'Outfit', sans-serif",
                 fontWeight: 600,

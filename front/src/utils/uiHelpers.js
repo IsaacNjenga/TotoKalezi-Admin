@@ -553,6 +553,7 @@ export const AlbumCard = ({ album, onView, onDelete, delay = 1 }) => {
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
+              height:30
             }}
           >
             {album.description}

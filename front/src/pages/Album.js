@@ -21,8 +21,6 @@ import {
   AlbumCard,
   AlbumRow,
 } from "../utils/uiHelpers";
-import { AlbumDetail } from "../components/AlbumPreview";
-import DetailsModal from "../components/DetailsModal";
 import { useAuth } from "../contexts/AuthContext";
 import { useNotification } from "../contexts/NotificationContext";
 import axios from "axios";
@@ -37,7 +35,6 @@ function Album() {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState("grid"); // "grid" | "list"
-  const [selected, setSelected] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -92,7 +89,6 @@ function Album() {
 
   const openView = (album) => {
     navigate(`/media/album/${album._id}`);
-    setSelected(album);
   };
 
   if (loading) return <LoadingComponent />;
@@ -362,16 +358,6 @@ function Album() {
           )}
         </div>
       </div>
-
-      <DetailsModal
-        open={!!selected}
-        setOpen={setSelected}
-        component={
-          <AlbumDetail album={selected} setDeleteTarget={setDeleteTarget} />
-        }
-        refresh={refresh}
-        width={800}
-      />
 
       <DeleteModal
         deleteTarget={deleteTarget}

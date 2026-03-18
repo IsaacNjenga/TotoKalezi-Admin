@@ -34,6 +34,10 @@ import {
   removeFromAlbum,
   updateAlbum,
 } from "../controllers/albumController.js";
+import {
+  fetchWebsiteContent,
+  updateSite,
+} from "../controllers/siteController.js";
 
 const router = express.Router();
 
@@ -70,5 +74,9 @@ router.put("/update-album-media/:id", protectRoute, addToAlbum);
 router.put("/update-album/:id", protectRoute, updateAlbum);
 router.delete("/delete-album/:id", protectRoute, deleteAlbum);
 router.delete("/delete-album-media/:id", protectRoute, removeFromAlbum);
+
+//website routes
+router.get("/website", fetchWebsiteContent);
+router.put("/update-site", updateSite);
 
 export { router as Router };

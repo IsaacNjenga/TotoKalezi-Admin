@@ -1,6 +1,18 @@
+import WebsiteModel from "../models/Website.js";
+
+const fetchWebsiteContent = async (req, res) => {
+  try {
+    const siteContent = await WebsiteModel.find();
+    return res.status(200).json({ success: true, siteContent: siteContent });
+  } catch (error) {
+    console.error("Error fetching site content:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const updateSite = async (req, res) => {
   try {
-    const webpage = await WebpageModel.findByIdAndUpdate(
+    const webpage = await WebsiteModel.findByIdAndUpdate(
       req.params.id,
       { ...req.body },
       { new: true },
@@ -15,4 +27,4 @@ const updateSite = async (req, res) => {
   }
 };
 
-export { updateSite };
+export { fetchWebsiteContent, updateSite };

@@ -1419,4 +1419,32 @@ export const globalStyles = `
         .amp-clear-btn:hover { border-color: #e74c3c !important; color: #e74c3c !important; background: rgba(231,76,60,0.06) !important; }
         .amp-copy-btn:hover { border-color: ${primary} !important; color: ${primary} !important; background: ${primaryDim} !important; }
       
+ @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+
+  .wp-page-card { transition: all 0.25s ease !important; animation: fadeUp 0.4s ease both; }
+  .wp-page-card:hover { transform: translateY(-2px) !important; box-shadow: 0 10px 30px rgba(133,74,154,0.15) !important; border-color: ${primaryMid} !important; }
+
+  .wp-edit-btn:hover { background: ${primaryDim} !important; border-color: ${primaryMid} !important; color: ${primary} !important; }
+  .wp-save-btn:hover { background: #6a3a7e !important; transform: translateY(-1px) !important; box-shadow: 0 6px 18px rgba(133,74,154,0.4) !important; }
+  .wp-cancel-btn:hover { border-color: #e74c3c !important; color: #e74c3c !important; }
+  .wp-upload-zone:hover { border-color: ${primary} !important; background: rgba(133,74,154,0.08) !important; }
+
+  .wp-url-input .ant-input { font-family: 'Outfit', sans-serif !important; font-size: 13px !important; border-radius: 8px !important; border-color: rgba(133,74,154,0.2) !important; }
+  .wp-url-input .ant-input:focus { border-color: ${primary} !important; box-shadow: 0 0 0 3px ${primaryDim} !important; }
+  .wp-url-input .ant-input-prefix { color: rgba(133,74,154,0.4) !important; }
+
+  .wp-progress-bar {
+    height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, ${primary}, #a066bc, ${accent});
+    background-size: 400px 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
+
   `;

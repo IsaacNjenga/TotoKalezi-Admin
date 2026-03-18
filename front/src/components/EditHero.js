@@ -19,9 +19,9 @@ import {
   presetKey,
 } from "../utils/uiHelpers";
 
-export default function EditHeroModal({ page, open, onClose, onSaved }) {
+export default function EditHeroModal({ page, onClose, onSaved }) {
   const { token } = useAuth();
-  const { openNotification } = useNotification();
+  const openNotification = useNotification();
   const [mode, setMode] = useState("url"); // "url" | "upload"
   const [urlInput, setUrlInput] = useState(page?.heroImg ?? "");
   const [preview, setPreview] = useState(page?.heroImg ?? "");
@@ -83,7 +83,7 @@ export default function EditHeroModal({ page, open, onClose, onSaved }) {
     setSaving(true);
     try {
       const res = await axios.put(
-        `/website/${page._id}`,
+        `/update-page/${page._id}`,
         { heroImg: urlInput.trim() },
         { headers: { Authorization: `Bearer ${token}` } },
       );

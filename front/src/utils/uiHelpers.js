@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Avatar, Tooltip, Image } from "antd";
+import { Avatar, Tooltip, Image, Divider, Tag, Modal } from "antd";
 import {
   EyeOutlined,
   DeleteOutlined,
@@ -7,8 +7,12 @@ import {
   TagOutlined,
   PlayCircleFilled,
   FileImageOutlined,
+  CloseOutlined,
+  LinkOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const cloudinaryUpload = axios.create({
   withCredentials: false,
@@ -957,6 +961,363 @@ export const AlbumRow = ({ album, onView, onDelete }) => {
         </Tooltip>
       </div>
     </div>
+  );
+};
+
+export const WebsitePageCardSkeleton = () => {
+  return (
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: 14,
+        border: "1px solid rgba(133,74,154,0.08)",
+        overflow: "hidden",
+        padding: 0,
+      }}
+    >
+      <div
+        style={{
+          height: 160,
+          background:
+            "linear-gradient(90deg, #f5f0fa 25%, #ede5f7 50%, #f5f0fa 75%)",
+          backgroundSize: "400px 100%",
+          animation: "shimmer 1.5s infinite linear",
+        }}
+      />
+      <div style={{ padding: "16px 18px" }}>
+        <div
+          style={{
+            height: 14,
+            width: "60%",
+            borderRadius: 6,
+            background: "#f0eaf7",
+            marginBottom: 8,
+          }}
+        />
+        <div
+          style={{
+            height: 11,
+            width: "40%",
+            borderRadius: 6,
+            background: "#f5f2fa",
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export const WebsitePageCard = ({ page, onEdit }) => {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const date = new Date(page.updatedAt).toLocaleDateString("en-KE", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
+  return (
+    <>
+      <div
+        className="wp-page-card"
+        style={{
+          background: "#fff",
+          borderRadius: 14,
+          border: "1px solid rgba(133,74,154,0.08)",
+          boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+          overflow: "hidden",
+        }}
+      >
+        {/* Hero image preview */}
+        <div
+          style={{
+            position: "relative",
+            height: 170,
+            background: "#0d0814",
+            overflow: "hidden",
+          }}
+        >
+          <img
+            src={page.heroImg}
+            alt={page.pageName}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              transition: "transform 0.4s ease",
+            }}
+            onMouseEnter={(e) => (e.target.style.transform = "scale(1.04)")}
+            onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to top, rgba(5,2,14,0.7) 0%, transparent 55%)",
+            }}
+          />
+
+          {/* Page name over image */}
+          <div style={{ position: "absolute", bottom: 10, left: 14 }}>
+            <span
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                padding: "2px 10px",
+                borderRadius: 20,
+                background: "rgba(133,74,154,0.3)",
+                backdropFilter: "blur(4px)",
+                border: "1px solid rgba(133,74,154,0.4)",
+                color: "#d4a8e8",
+              }}
+            >
+              {page.pageName}
+            </span>
+          </div>
+
+          {/* Preview button */}
+          <button
+            onClick={() => setPreviewOpen(true)}
+            style={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              width: 30,
+              height: 30,
+              borderRadius: 7,
+              border: "1px solid rgba(255,255,255,0.2)",
+              background: "rgba(10,5,20,0.6)",
+              backdropFilter: "blur(6px)",
+              color: "rgba(255,255,255,0.8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              fontSize: 13,
+              padding: 0,
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = primaryDim;
+              e.currentTarget.style.borderColor = primaryMid;
+              e.currentTarget.style.color = primary;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(10,5,20,0.6)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+              e.currentTarget.style.color = "rgba(255,255,255,0.8)";
+            }}
+          >
+            <EyeOutlined />
+          </button>
+        </div>
+
+        {/* Info */}
+        <div style={{ padding: "14px 16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 8,
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: "#1a1a1a",
+                  margin: "0 0 2px",
+                }}
+              >
+                {page.pageName}
+              </p>
+              <a
+                href={` https://www.totokalezi.org${page.pageUrl}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontFamily: "'Outfit', sans-serif",
+                  fontSize: 11,
+                  color: primary,
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+              >
+                <LinkOutlined style={{ fontSize: 10 }} />
+                https://www.totokalezi.org{page.pageUrl}
+              </a>
+            </div>
+            <Tooltip title="Edit hero image">
+              <button
+                className="wp-edit-btn"
+                onClick={() => onEdit(page)}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 8,
+                  border: "1px solid rgba(133,74,154,0.18)",
+                  background: "transparent",
+                  color: "#aaa",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  fontSize: 14,
+                  padding: 0,
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <EditOutlined />
+              </button>
+            </Tooltip>
+          </div>
+
+          <Divider
+            style={{ borderColor: "rgba(133,74,154,0.08)", margin: "8px 0" }}
+          />
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: 11,
+                color: "#bbb",
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <CalendarOutlined style={{ fontSize: 10 }} /> Updated {date}
+            </span>
+            <Tag
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: 9,
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "1px 8px",
+                borderRadius: 20,
+                margin: 0,
+                background: greenDim,
+                border: "1px solid rgba(39,174,96,0.25)",
+                color: green,
+              }}
+            >
+              Live
+            </Tag>
+          </div>
+        </div>
+      </div>
+
+      {/* Full preview modal */}
+      <Modal
+        open={previewOpen}
+        onCancel={() => setPreviewOpen(false)}
+        footer={null}
+        centered
+        width={800}
+        closeIcon={false}
+        styles={{
+          content: {
+            padding: 0,
+            borderRadius: 16,
+            overflow: "hidden",
+            border: `1px solid ${primaryMid}`,
+          },
+          header: { display: "none" },
+          body: { padding: 0 },
+          mask: {
+            backdropFilter: "blur(4px)",
+            background: "rgba(10,5,20,0.55)",
+          },
+        }}
+      >
+        <div style={{ position: "relative" }}>
+          <img
+            src={page.heroImg}
+            alt={page.pageName}
+            style={{
+              width: "100%",
+              maxHeight: 500,
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "linear-gradient(to top, rgba(5,2,14,0.8) 0%, transparent 50%)",
+            }}
+          />
+          <div style={{ position: "absolute", bottom: 20, left: 24 }}>
+            <p
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: "1.2rem",
+                fontWeight: 800,
+                color: "#fff",
+                margin: 0,
+              }}
+            >
+              {page.pageName}
+            </p>
+            <a
+              href={`https://www.totokalezi.org${page.pageUrl}`}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                fontFamily: "'Outfit', sans-serif",
+                fontSize: 12,
+                color: "rgba(255,255,255,0.5)",
+                textDecoration: "none",
+              }}
+            >
+             https://www.totokalezi.org{page.pageUrl}
+            </a>
+          </div>
+          <button
+            onClick={() => setPreviewOpen(false)}
+            style={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              width: 30,
+              height: 30,
+              borderRadius: 7,
+              border: "1px solid rgba(255,255,255,0.2)",
+              background: "rgba(10,5,20,0.6)",
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              fontSize: 13,
+              padding: 0,
+            }}
+          >
+            <CloseOutlined />
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 };
 

@@ -14,7 +14,7 @@ function useFetchWebsite() {
     if (!isAuthenticated || !token) return;
     setLoading(true);
     try {
-      const res = await axios.get("/website", {
+      const res = await axios.get("/website-pages", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {

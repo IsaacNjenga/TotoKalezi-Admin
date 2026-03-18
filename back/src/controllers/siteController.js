@@ -1,5 +1,19 @@
 import WebsiteModel from "../models/Website.js";
 
+const createPage = async (req, res) => {
+  try {
+    const newPage = WebsiteModel({ ...req.body });
+    await newPage.save();
+
+    return res
+      .status(201)
+      .json({ success: true, message: "Successfully created" });
+  } catch (error) {
+    console.error("Error creating site content:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const fetchWebsiteContent = async (req, res) => {
   try {
     const siteContent = await WebsiteModel.find();
@@ -27,4 +41,4 @@ const updateSite = async (req, res) => {
   }
 };
 
-export { fetchWebsiteContent, updateSite };
+export { fetchWebsiteContent, updateSite, createPage };

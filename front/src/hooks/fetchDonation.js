@@ -4,15 +4,14 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function useFetchDonation() {
-  const { token,isAuthenticated } = useAuth();
+  const { token, isAuthenticated } = useAuth();
   const [donation, setDonation] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
 
   const fetchDonation = useCallback(
     async (donationId) => {
-      if (!isAuthenticated) return;
-      if (!donationId) return;
+      if (!isAuthenticated || !donationId || !token) return;
       setLoading(true);
       try {
         const res = await axios.get(`/fetch-donation/${donationId}`, {

@@ -8,8 +8,6 @@ import {
   PictureOutlined,
   PoweroffOutlined,
   UsergroupAddOutlined,
-  VideoCameraAddOutlined,
-  VideoCameraOutlined,
   SettingOutlined,
   LeftSquareOutlined,
   RightSquareOutlined,
@@ -42,30 +40,36 @@ const menuConfig = [
     path: "/donations",
   },
   {
-    key: "media-group",
+    key: "/gallery",
     label: "Gallery",
-    icon: VideoCameraOutlined,
-    children: [
-      {
-        key: "/media",
-        label: "View Gallery",
-        icon: PictureOutlined,
-        path: "/media",
-      },
-      {
-        key: "/media/albums",
-        label: "View Albums",
-        icon: FileImageOutlined,
-        path: "/media/albums",},
-      {
-        key: "/media/create-media",
-        label: "Upload Media",
-        icon: VideoCameraAddOutlined,
-        path: "/media/create-media",
-      },
-      
-    ],
+    icon: PictureOutlined,
+    path: "/media",
   },
+  {
+    key: "/media/albums",
+    label: "Albums",
+    icon: FileImageOutlined,
+    path: "/media/albums",
+  },
+  // {
+  //   key: "media-group",
+  //   label: "Gallery",
+  //   icon: PictureOutlined,
+  //   children: [
+  //     {
+  //       key: "/media",
+  //       label: "View Gallery",
+  //       icon: PictureOutlined,
+  //       path: "/media",
+  //     },
+  //     {
+  //       key: "/media/albums",
+  //       label: "View Albums",
+  //       icon: FileImageOutlined,
+  //       path: "/media/albums",
+  //     },
+  //   ],
+  // },
   {
     key: "/volunteers",
     label: "Volunteers",

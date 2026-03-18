@@ -4,15 +4,14 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function useFetchMedia() {
-  const {isAuthenticated}=useAuth()
+  const { token, isAuthenticated } = useAuth();
   const [media, setMedia] = useState({});
   const [loading, setLoading] = useState(false);
   const openNotification = useNotification();
 
   const fetchMedia = useCallback(
     async (mediaId) => {
-      if (!isAuthenticated) return;
-      if (!mediaId) return;
+      if (!isAuthenticated || !mediaId || !token) return;
       setLoading(true);
       try {
         const res = await axios.get(`/fetch-media/${mediaId}`);

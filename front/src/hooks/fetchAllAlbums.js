@@ -4,14 +4,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext/index.js";
 
 function useFetchAllAlbums() {
-  const { token,isAuthenticated } = useAuth();
+  const { token, isAuthenticated } = useAuth();
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const openNotification = useNotification();
 
   const fetchAlbum = useCallback(async () => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !token) return;
     setLoading(true);
     try {
       const res = await axios.get("/fetch-all-albums", {

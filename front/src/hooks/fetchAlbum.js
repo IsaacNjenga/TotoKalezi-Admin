@@ -11,8 +11,7 @@ function useFetchAlbum() {
 
   const fetchAlbum = useCallback(
     async (albumId) => {
-      if (!isAuthenticated) return;
-      if (!albumId) return;
+      if (!isAuthenticated || !albumId || !token) return;
       setLoading(true);
       try {
         const res = await axios.get(`/fetch-album/${albumId}`, {

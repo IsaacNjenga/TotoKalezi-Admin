@@ -96,6 +96,7 @@ function Volunteers() {
   const { volunteers, loading, refresh } = useFetchAllVolunteers();
   const openNotification = useNotification();
   const [search, setSearch] = useState("");
+  //eslint-disable-next-line
   const [statusFilter, setStatusFilter] = useState("all");
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);

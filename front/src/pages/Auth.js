@@ -46,7 +46,7 @@ const submitBtnStyle = {
   transition: "all 0.3s ease",
 };
 
-const signInTextStyle = { cursor: "pointer" };
+// const signInTextStyle = { cursor: "pointer" };
 
 function Auth() {
   const [form] = Form.useForm();
@@ -66,9 +66,9 @@ function Auth() {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const toggleSignIn = () => {
-    setIsSignIn((prev) => !prev);
-  };
+  // const toggleSignIn = () => {
+  //   setIsSignIn((prev) => !prev);
+  // };
 
   const handleSubmit = async () => {
     setLoading(true);

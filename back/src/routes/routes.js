@@ -78,7 +78,7 @@ router.delete("/delete-album-media/:id", protectRoute, removeFromAlbum);
 
 //website routes
 router.post("/create-page", protectRoute, createPage);
-router.get("/website-pages", protectRoute, fetchWebsiteContent);
+router.get("/website-pages", fetchWebsiteContent);
 router.put("/update-page/:id", protectRoute, updateSite);
 
 export { router as Router };

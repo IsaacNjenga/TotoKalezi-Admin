@@ -7,35 +7,23 @@ import { connectDB } from "./src/config/db.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
 
 const corsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000"], // update later for prod
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 200,
 };
 
-async function startServer() {
-  try {
-    await connectDB();
-    app.use(cors(corsOptions));
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
+// Middleware
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-    app.use("/TotoKalezi", Router);
+// Routes
+app.use("/TotoKalezi", Router);
 
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  } catch (error) {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-  }
-}
-
-startServer();
-
-// Preflight requests
+// Preflight
 app.use((req, res, next) => {
   if (req.method === "OPTIONS") {
     res.header("Access-Control-Allow-Origin", req.headers.origin);
@@ -46,3 +34,19 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// ✅ IMPORTANT: connect DB ONCE (serverless-safe)
+let isConnected = false;
+
+async function ensureDB() {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+}
+
+// ✅ Wrap handler for Vercel
+export default async function handler(req, res) {
+  await ensureDB();
+  return app(req, res);
+}

@@ -39,6 +39,8 @@ import {
   fetchWebsiteContent,
   updateSite,
 } from "../controllers/siteController.js";
+import { generateToken } from "../middleware/token.middleware.js";
+import { stkPush } from "../controllers/paymentController.js";
 
 const router = express.Router();
 
@@ -80,5 +82,8 @@ router.delete("/delete-album-media/:id", protectRoute, removeFromAlbum);
 router.post("/create-page", createPage);
 router.get("/website-pages", fetchWebsiteContent);
 router.put("/update-page/:id", protectRoute, updateSite);
+
+// payment route
+router.post("/donate", generateToken, stkPush);
 
 export { router as Router };

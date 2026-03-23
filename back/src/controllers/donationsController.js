@@ -1,8 +1,24 @@
 import DonationModel from "../models/Donations.js";
 
-const createDonation = async (req, res) => {
+const createDonation = async (
+  req,
+  res,
+  amount,
+  phone_number,
+  transactionID,
+  name,
+  email,
+  message,
+) => {
   try {
-    const newDonation = new DonationModel({ ...req.body });
+    const newDonation = new DonationModel({
+      amount: amount,
+      phone_number: phone_number,
+      transactionID: transactionID,
+      name: name,
+      email: email,
+      message: message,
+    });
     await newDonation.save();
     return res
       .status(201)

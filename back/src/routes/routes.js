@@ -69,15 +69,15 @@ router.get("/fetch-donation/:id", protectRoute, fetchDonation);
 
 //album routes
 router.post("/create-album", protectRoute, createAlbum);
-router.get("/fetch-all-albums", protectRoute, fetchAlbums);
-router.get("/fetch-album/:id", protectRoute, fetchAlbum);
+router.get("/fetch-all-albums", fetchAlbums);
+router.get("/fetch-album/:id", fetchAlbum);
 router.put("/update-album-media/:id", protectRoute, addToAlbum);
 router.put("/update-album/:id", protectRoute, updateAlbum);
 router.delete("/delete-album/:id", protectRoute, deleteAlbum);
 router.delete("/delete-album-media/:id", protectRoute, removeFromAlbum);
 
 //website routes
-router.post("/create-page", protectRoute, createPage);
+router.post("/create-page", createPage);
 router.get("/website-pages", fetchWebsiteContent);
 router.put("/update-page/:id", protectRoute, updateSite);
 

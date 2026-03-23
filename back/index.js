@@ -9,7 +9,11 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://toto-kalezi-app.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://toto-kalezi-app.vercel.app",
+    "https://www.totokalezi.org",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],

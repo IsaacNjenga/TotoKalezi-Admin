@@ -1,7 +1,6 @@
 import DonationModel from "../models/Donations.js";
 
 const createDonation = async (
-  req,
   res,
   amount,
   phone_number,

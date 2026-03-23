@@ -1,5 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import { createDonation } from "./donationsController";
 
 dotenv.config();
 
@@ -8,7 +9,7 @@ const billAccountRef = process.env.STANBIC_BILL_REF;
 
 const stkPush = async (req, res) => {
   try {
-    const { amount, phone_number } = req.body;
+    const { name, email, message, amount, phone_number } = req.body;
     const payload = {
       dbsReferenceId: `donation-${Date.now()}`,
       billAccountRef: billAccountRef,
@@ -24,10 +25,22 @@ const stkPush = async (req, res) => {
     });
 
     res.json(response.data);
-    console.log(response)
+
+    if (response.status === "Success") {
+      const result = await createDonation(
+        res,
+        amount,
+        phone_number,
+        response.data.dbsReferenceId,
+        name,
+        email,
+        message,
+      );
+      console.log(result);
+      return result;
+    }
   } catch (error) {
     console.error(error.response?.data || error.message);
-
     res.status(500).json({
       error: "STK push failed",
     });

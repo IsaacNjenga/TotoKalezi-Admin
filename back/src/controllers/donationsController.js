@@ -1,30 +1,28 @@
 import DonationModel from "../models/Donations.js";
 
-const createDonation = async (
-  res,
+const createDonation = async ({
   amount,
   phone_number,
   transactionID,
   name,
   email,
   message,
-) => {
+}) => {
   try {
     const newDonation = new DonationModel({
-      amount: amount,
-      phone_number: phone_number,
-      transactionID: transactionID,
-      name: name,
-      email: email,
-      message: message,
+      amount,
+      phone_number,
+      transactionID,
+      name,
+      email,
+      message,
     });
+
     await newDonation.save();
-    return res
-      .status(201)
-      .json({ success: true, message: "Donation saved successfully" });
+    return { success: true };
   } catch (error) {
     console.error("Error creating donation:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    throw error;
   }
 };
 

@@ -10,6 +10,7 @@ const billAccountRef = process.env.STANBIC_BILL_REF;
 const stkPush = async (req, res) => {
   try {
     const { name, email, message, amount, phone_number } = req.body;
+
     const payload = {
       dbsReferenceId: `donation-${Date.now()}`,
       billAccountRef: billAccountRef,
@@ -24,24 +25,29 @@ const stkPush = async (req, res) => {
       },
     });
 
-    res.json(response.data);
-
-    if (response.status === "Success") {
-      const res = await createDonation(
-        res,
+    // ✅ Check correct success condition
+    if (response.data?.status === "Success") {
+      await createDonation({
         amount,
         phone_number,
-        response.data.dbsReferenceId,
+        transactionID: response.data.dbsReferenceId,
         name,
         email,
         message,
-      );
-      if (res.status === 201) console.log("Donation saved successfully");
-      return res;
+      });
+
+      console.log("Donation saved successfully");
     }
+
+    // ✅ Send response ONCE
+    return res.status(200).json({
+      success: true,
+      data: response.data,
+    });
   } catch (error) {
     console.error(error.response?.data || error.message);
-    res.status(500).json({
+
+    return res.status(500).json({
       error: "STK push failed",
     });
   }

@@ -7,7 +7,7 @@ const donationSchema = new mongoose.Schema(
     phone_number: { type: String, required: true },
     transactionID: { type: String, required: true, unique: true },
     amount: { type: Number, required: true },
-    message: { type: String, required: true },
+    message: { type: String, required: false },
     isRead: { type: Boolean, default: false },
     isStarred: { type: Boolean, default: false },
   },

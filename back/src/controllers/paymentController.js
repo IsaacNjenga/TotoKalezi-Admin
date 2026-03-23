@@ -1,6 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { createDonation } from "./donationsController";
+import { createDonation } from "./donationsController.js";
 
 dotenv.config();
 

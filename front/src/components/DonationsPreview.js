@@ -1,9 +1,5 @@
 import { Avatar, Button, Divider } from "antd";
-import {
-  CalendarOutlined,
-  MessageOutlined,
-  CreditCardOutlined,
-} from "@ant-design/icons";
+import { CalendarOutlined, CreditCardOutlined } from "@ant-design/icons";
 import {
   primary,
   primaryDim,
@@ -11,15 +7,10 @@ import {
   green,
   greenDim,
 } from "../utils/uiHelpers";
+import { format } from "date-fns";
 
 export default function DonationsPreview({ donation }) {
   if (!donation) return null;
-
-  const date = new Date(donation.createdAt).toLocaleDateString("en-KE", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
 
   const initials = donation.name
     ?.split(" ")
@@ -120,22 +111,12 @@ export default function DonationsPreview({ donation }) {
           {
             icon: <CreditCardOutlined />,
             label: "Transaction ID",
-            value: (
-              <span
-                style={{
-                  fontFamily: "'Courier New', monospace",
-                  fontSize: 12,
-                  color: "#555",
-                }}
-              >
-                {donation.transactionID}
-              </span>
-            ),
+            value: donation.transactionID,
           },
           {
             icon: <CalendarOutlined />,
             label: "Date",
-            value: date,
+            value: format(new Date(donation.createdAt), "PPpp"),
           },
         ].map(({ icon, label, value }) => (
           <div
@@ -185,7 +166,7 @@ export default function DonationsPreview({ donation }) {
                   fontFamily: "'Outfit', sans-serif",
                   fontSize: 13,
                   fontWeight: 500,
-                  color: "#333",
+                  color: "#1f1f1f",
                   margin: 0,
                 }}
               >
@@ -215,7 +196,7 @@ export default function DonationsPreview({ donation }) {
           gap: 6,
         }}
       >
-        <MessageOutlined style={{ color: primary }} /> Message
+        Message
       </p>
       <div
         style={{
@@ -247,7 +228,7 @@ export default function DonationsPreview({ donation }) {
         <Button
           href={`mailto:${donation.email}`}
           type="primary"
-          size="small"
+          size="medium"
           block
           style={{
             flex: 1,

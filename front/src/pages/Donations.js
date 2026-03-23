@@ -12,6 +12,7 @@ import LoadingComponent from "../components/LoadingComponent";
 import { globalStyles, primary, green } from "../utils/uiHelpers";
 import DetailsModal from "../components/DetailsModal";
 import DonationsPreview from "../components/DonationsPreview";
+import { format } from "date-fns";
 
 function StatCard({ icon, value, label, color, sub }) {
   return (
@@ -256,7 +257,7 @@ function Donations() {
     {
       key: "txn",
       ellipsis: true,
-      width: 150,
+      width: 200,
       render: (_, record) => (
         <span
           style={{
@@ -288,7 +289,7 @@ function Donations() {
     },
     {
       key: "date",
-      width: 80,
+      width: 180,
       render: (_, record) => (
         <span
           style={{
@@ -297,10 +298,11 @@ function Donations() {
             color: "#bbb",
           }}
         >
-          {new Date(record.createdAt).toLocaleDateString("en-US", {
+          {format(new Date(record.createdAt), "PPpp")}
+          {/* {new Date(record.createdAt).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
-          })}
+          })} */}
         </span>
       ),
     },

@@ -35,11 +35,8 @@ const stkPush = async (req, res) => {
         email,
         message,
       });
-
-      console.log("Donation saved successfully");
     }
 
-    // ✅ Send response ONCE
     return res.status(200).json({
       success: true,
       data: response.data,

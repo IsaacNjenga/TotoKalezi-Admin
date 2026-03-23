@@ -27,7 +27,7 @@ const stkPush = async (req, res) => {
     res.json(response.data);
 
     if (response.status === "Success") {
-      const result = await createDonation(
+      const res = await createDonation(
         res,
         amount,
         phone_number,
@@ -36,8 +36,8 @@ const stkPush = async (req, res) => {
         email,
         message,
       );
-      console.log(result);
-      return result;
+      if (res.status === 201) console.log("Donation saved successfully");
+      return res;
     }
   } catch (error) {
     console.error(error.response?.data || error.message);

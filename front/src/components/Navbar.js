@@ -419,7 +419,7 @@ function Navbar() {
                 </Tooltip> */}
 
                 {/* Settings */}
-                <Tooltip title="Settings">
+                {/* <Tooltip title="Settings">
                   <button
                     className="header-icon-btn"
                     onClick={() => navigate("/settings")}
@@ -441,7 +441,7 @@ function Navbar() {
                   >
                     <SettingOutlined />
                   </button>
-                </Tooltip>
+                </Tooltip> */}
 
                 {/* Divider */}
                 <div

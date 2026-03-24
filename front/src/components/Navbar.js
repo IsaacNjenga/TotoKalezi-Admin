@@ -8,7 +8,6 @@ import {
   PictureOutlined,
   PoweroffOutlined,
   UsergroupAddOutlined,
-  SettingOutlined,
   LeftSquareOutlined,
   RightSquareOutlined,
   CodeOutlined,
@@ -380,6 +379,16 @@ function Navbar() {
               zIndex: 100,
             }}
           >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 3,
+                background: `linear-gradient(90deg, transparent, ${primary}, #a354cb, transparent)`,
+              }}
+            />
             <div
               style={{
                 display: "flex",

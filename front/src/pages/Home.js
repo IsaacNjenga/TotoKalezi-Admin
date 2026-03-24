@@ -23,6 +23,7 @@ import {
   dark,
 } from "../utils/uiHelpers";
 import { Image } from "antd";
+import CountUpComponent from "../components/CountUp";
 
 // ── Helpers ──────────────────────────────────────────────────────
 function timeAgo(dateStr) {
@@ -559,7 +560,13 @@ function Home() {
           <StatCard
             delay={0}
             icon={<CreditCardOutlined />}
-            value={isLoading ? "—" : (donations?.length ?? 0)}
+            value={
+              isLoading ? (
+                "—"
+              ) : (
+                <CountUpComponent value={donations?.length ?? 0} />
+              )
+            }
             label="Total Donations"
             color={primary}
             trend={12}
@@ -567,7 +574,16 @@ function Home() {
           <StatCard
             delay={80}
             icon={<HeartOutlined />}
-            value={isLoading ? "—" : `KES ${totalKES.toLocaleString()}`}
+            value={
+              isLoading ? (
+                "—"
+              ) : (
+                <CountUpComponent
+                  value={totalKES}
+                  prefix={"KES "}
+                />
+              )
+            }
             label="Total Raised"
             color={green}
             sub={topDonor ? `Top: ${topDonor.name}` : undefined}
@@ -575,7 +591,13 @@ function Home() {
           <StatCard
             delay={160}
             icon={<TeamOutlined />}
-            value={isLoading ? "—" : (volunteers?.length ?? 0)}
+            value={
+              isLoading ? (
+                "—"
+              ) : (
+                <CountUpComponent value={volunteers?.length ?? 0} />
+              )
+            }
             label="Volunteers"
             color={accent}
             trend={5}
@@ -583,7 +605,9 @@ function Home() {
           <StatCard
             delay={240}
             icon={<PictureOutlined />}
-            value={isLoading ? "—" : (media?.length ?? 0)}
+            value={
+              isLoading ? "—" : <CountUpComponent value={media?.length ?? 0} />
+            }
             label="Gallery Items"
             color={blue}
           />

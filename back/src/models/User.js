@@ -13,22 +13,16 @@ const userSchema = new mongoose.Schema(
   { collection: "users", timestamps: true },
 );
 
-//hashing password before saving user
-userSchema.pre("save", async function () {
+// Hash password only when it is new or has changed
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
-//compare password
+// Compare password
 userSchema.methods.comparePassword = async function (userPassword) {
-  // console.log("Comparing passwords:", {
-  //   userPassword,
-  //   storedHash: this.password,
-  // });
-  // console.log(
-  //   "bcrypt.compare result:",
-  //   await bcrypt.compare(userPassword, this.password),
-  // );
   return await bcrypt.compare(userPassword, this.password);
 };
 

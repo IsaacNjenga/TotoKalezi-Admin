@@ -13,15 +13,23 @@ const userSchema = new mongoose.Schema(
   { collection: "users", timestamps: true },
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+//hashing password before saving user
+userSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+//compare password
+userSchema.methods.comparePassword = async function (userPassword) {
+  // console.log("Comparing passwords:", {
+  //   userPassword,
+  //   storedHash: this.password,
+  // });
+  // console.log(
+  //   "bcrypt.compare result:",
+  //   await bcrypt.compare(userPassword, this.password),
+  // );
+  return await bcrypt.compare(userPassword, this.password);
 };
 
 const UserModel = mongoose.model("User", userSchema);

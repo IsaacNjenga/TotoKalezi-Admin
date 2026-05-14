@@ -2,7 +2,7 @@ import WebsiteModel from "../models/Website.js";
 
 const createPage = async (req, res) => {
   try {
-    const newPage = WebsiteModel({ ...req.body });
+    const newPage = new WebsiteModel({ ...req.body });
     await newPage.save();
 
     return res

@@ -40,6 +40,8 @@ const inputStyle = {
   marginTop: 0,
 };
 
+const signInTextStyle = { cursor: "pointer" };
+
 const submitBtnStyle = {
   padding: 18,
   borderRadius: 18,
@@ -66,9 +68,9 @@ function Auth() {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  // const toggleSignIn = () => {
-  //   setIsSignIn((prev) => !prev);
-  // };
+  const toggleSignIn = () => {
+    setIsSignIn((prev) => !prev);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);

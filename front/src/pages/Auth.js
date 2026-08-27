@@ -327,13 +327,13 @@ function Auth() {
                       </Form.Item>
                     )}
 
-                    {isSignIn && (
+                    {/* {isSignIn && (
                       <div style={{ marginTop: 0, marginBottom: 10 }}>
                         <Text style={{ color: "#fff", cursor: "pointer" }}>
                           Forgot your password?
                         </Text>
                       </div>
-                    )}
+                    )} */}
 
                     <Form.Item>
                       <Button
@@ -361,7 +361,7 @@ function Auth() {
                         fontWeight: 500,
                       }}
                     >
-                      {/* {isSignIn ? (
+                       {isSignIn ? (
                         <Text
                           style={{
                             color: "#ffffff",
@@ -383,7 +383,7 @@ function Auth() {
                             Sign In
                           </span>
                         </Text>
-                      )} */}
+                      )} 
                     </div>
                   </Form>
                 </div>
